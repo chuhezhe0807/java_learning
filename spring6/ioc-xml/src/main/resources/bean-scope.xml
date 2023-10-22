@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--    scope属性 当配置值为 prototype 为多实例对象（创建时机为获取bean时） 为singleton时为单实例对象（创建时机为IOC容器初始化时） -->
+    <bean id="order" class="com.chuhezhe.iocxml.scope.Order" scope="singleton"></bean>
+</beans>

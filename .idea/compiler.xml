@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Java" />
+        <module name="jdk8-17_features" />
+        <module name="ioc-annotation" />
+        <module name="junit" />
+        <module name="aop" />
+        <module name="resource" />
+        <module name="basic-business" />
+        <module name="ioc-xml" />
+        <module name="validator" />
+        <module name="i18n" />
+        <module name="fileupload" />
+        <module name="tiny-ioc" />
+        <module name="jdbc-tx" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="little-ioc-copy" target="17" />
+      <module name="spring" target="17" />
+      <module name="spring-ioc-annotation" target="17" />
+      <module name="spring-ioc-xml" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="fileupload" options="-parameters" />
+      <module name="spring-ioc-annotation" options="" />
+    </option>
+  </component>
+</project>

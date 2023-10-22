@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--    p命名空间注入-->
+    <bean id="bookP" class="com.chuhezhe.iocxml.di.Book"
+          p:author="xiaozhang"
+          p:name="bookName"
+          p:lessonList-ref="lessonList111"
+          ></bean>
+<!--
+    1、创建三个对象
+    2、注入普通类型属性
+    3、使用util：类型 定义
+    4、在bean中引入util:定义类型bean
+-->
+    <bean id="book" class="com.chuhezhe.iocxml.di.Book">
+        <property name="author" value="xiaozhang"></property>
+        <property name="name" value="bookName"></property>
+
+<!--        注入lessonList-->
+        <property name="lessonList" ref="lessonList111"></property>
+    </bean>
+
+    <util:list id="lessonList111">
+        <ref bean="lesson01"></ref>
+        <ref bean="lesson02"></ref>
+    </util:list>
+
+    <bean id="lesson01" class="com.chuhezhe.iocxml.di.Lesson">
+        <property name="lessonName" value="PE"></property>
+    </bean>
+    <bean id="lesson02" class="com.chuhezhe.iocxml.di.Lesson">
+        <property name="lessonName" value="art"></property>
+    </bean>
+
+</beans>
