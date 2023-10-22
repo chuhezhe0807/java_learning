@@ -33,7 +33,7 @@ public class FileStorageController {
 
     // 校验接口，上传前现根据本接口查询一下 服务器是否存在该文件
     @GetMapping("/upload")
-    public Result<CheckResultVo> checkUpload(FileChunkDto dto) {return Res.ok(fileChunkService.check(dto));};
+    public Result<CheckResultVo> checkUpload(FileChunkDto dto) {return Res.ok(fileChunkService.check(dto));}
 
     /**
      * 文件上传接口
@@ -58,7 +58,7 @@ public class FileStorageController {
         catch(Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
-            return Res.error("上传失败!");
+            return Res.error();
         }
     }
 

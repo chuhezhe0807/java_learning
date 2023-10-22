@@ -17,13 +17,10 @@ public class Res {
     private static final int SUCCESS_CODE = 0;
     private static final int FAIL_CODE = 1;
 
-    public static <T> Result<T> ok() {return new Result<T>(SUCCESS_CODE, SUCCESS);};
+    public static <T> Result<T> ok() {return new Result<>(SUCCESS_CODE, SUCCESS);}
 
-    public static <T> Result<T> ok(T data) {return new Result<T>(SUCCESS, SUCCESS_CODE, data);};
+    public static <T> Result<T> ok(T data) {return new Result<>(SUCCESS, SUCCESS_CODE, data);}
 
-    public static <T> Result<T> ok(String message) {return new Result<T>(SUCCESS_CODE, message);};
-
-    public static <T> Result<T> error(String message) {return new Result<T>(FAIL, FAIL_CODE, false);};
-
-    public static <T> Result<T> response(int code, String msg, T data) {return new Result<T>(msg, code, data);};
+    public static <T> Result<T> error() {return new Result<>(FAIL, FAIL_CODE, false);}
+    public static <T> Result<T> error(String message) {return new Result<>(message, FAIL_CODE, false);}
 }
