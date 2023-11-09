@@ -11,8 +11,6 @@
     <modules>
         <module>Java</module>
         <module>spring6</module>
-        <module>basic-business</module>
-        <module>basic-business/fileupload</module>
         <module>jdk8-17_features</module>
     </modules>
 
