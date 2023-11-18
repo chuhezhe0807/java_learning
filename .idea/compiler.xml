@@ -13,16 +13,16 @@
         <module name="junit" />
         <module name="aop" />
         <module name="resource" />
-        <module name="basic-business" />
         <module name="ioc-xml" />
         <module name="validator" />
-        <module name="i18n" />
-        <module name="fileupload" />
         <module name="tiny-ioc" />
         <module name="jdbc-tx" />
+        <module name="i18n" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="basic-business" target="17" />
+      <module name="fileupload" target="1.8" />
       <module name="little-ioc-copy" target="17" />
       <module name="spring" target="17" />
       <module name="spring-ioc-annotation" target="17" />

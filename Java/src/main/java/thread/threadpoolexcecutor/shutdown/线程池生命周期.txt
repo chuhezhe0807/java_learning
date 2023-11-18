@@ -1,0 +1,10 @@
+RUNNING:    可以接受新任务，并且也能处理任务队列中的任务
+SHUTDOWN:   不接受新任务，但可以处理任务队列中的任务
+STOP:       不接受新任务，也不处理任务队列中的任务，还中断正在处理任务的线程
+TIDYING:    所有任务已终止，线程池中线程数量为0
+TERMINATED: 线程池彻底关闭
+
+生命周期流程
+RUNNING - shutdown() -> SHUTDOWN - 任务队列为空 && 工作线程数量为0 -> TIDYING - terminated() > TERMINATED
+RUNNING - shutdownNow() -> STOP - 工作线程数量为0 -> TIDYING - terminated() > TERMINATED
+
