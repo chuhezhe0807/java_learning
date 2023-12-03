@@ -65,4 +65,30 @@ public class OptionalTest {
                 .map(Student::getAge)
                 .ifPresent(age -> System.out.println(age + "岁"));
     }
+
+    @Test
+    public void test04() {
+        String a = "hello2";
+        final String b = "hello";
+        String c = "hello";
+
+        String d = b + 2;
+        String e = c + 2;
+
+        System.out.println(a == d); // true
+        System.out.println(a == e); // false
+    }
+
+    @Test
+    public void test05() {
+        String a = new String("222");
+
+        changeVal(a);
+
+        System.out.println(a); // java 函数参数是按照值传递的，所以此处输出为 "222"
+    }
+
+    void changeVal(String a) {
+        a = new String("11");
+    }
 }
