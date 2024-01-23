@@ -11,6 +11,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/basic-business/pom.xml" />
+        <option value="$PROJECT_DIR$/jdk8-17_features/pom.xml" />
         <option value="$PROJECT_DIR$/spring-ioc-annotation/pom.xml" />
         <option value="$PROJECT_DIR$/spring-ioc-xml/pom.xml" />
         <option value="$PROJECT_DIR$/spring/pom.xml" />

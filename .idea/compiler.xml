@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Java" />
-        <module name="jdk8-17_features" />
         <module name="ioc-annotation" />
         <module name="junit" />
         <module name="aop" />
@@ -23,6 +22,7 @@
     <bytecodeTargetLevel>
       <module name="basic-business" target="17" />
       <module name="fileupload" target="1.8" />
+      <module name="jdk8-17_features" target="17" />
       <module name="little-ioc-copy" target="17" />
       <module name="spring" target="17" />
       <module name="spring-ioc-annotation" target="17" />

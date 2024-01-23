@@ -1,6 +1,0 @@
-
-JDK12中预览特性：switch表达式
-JDK13中二次预览特性：switch表达式
-JDK14中转正特性：switch表达式
-
-JDK17的预览特性：switch的模式匹配
