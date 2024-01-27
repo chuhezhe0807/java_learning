@@ -1,10 +1,9 @@
-package thread.threadsafemore.singleton;
+package thread.threadsafe.singleton;
 
 /**
  * ClassName: BankTest
  * Description:
  *      实现线程安全的懒汉式
- * @Author 尚硅谷-宋红康
  * @Create 8:51
  * @Version 1.0
  */

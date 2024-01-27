@@ -1,18 +1,22 @@
-package thread.cachepadding;
+package thread.lockupgrade.cachepadding;
 
 /**
  * 缓存行对齐
  *
- * ClassName: CacheLinePaddingTest01
+ * ClassName: CacheLinePaddingTest02
  * Package: thread.cas
  * Description:
  *
  * @Author Chuhezhe
- * @Create 2023/10/28 21:36
+ * @Create 2023/10/28 22:09
  * @Version 1.0
  */
-public class CacheLinePaddingTest01 {
-    private static class T {
+public class CacheLinePaddingTest02 {
+    private static class Padding {
+        public volatile long p1, p2, p3, p4, p5, p6, p7; // 8 * 7 = 56个字节 一个cache line总共64个字节
+    }
+
+    private static class T extends Padding {
         // volatile 保证线程的可见性
         public volatile long x = 0L;
     }
@@ -43,6 +47,6 @@ public class CacheLinePaddingTest01 {
         t1.join();
         t2.join();
 
-        System.out.println((System.nanoTime() - start) / 100_0000); // 执行时间100ms左右
+        System.out.println((System.nanoTime() - start) / 100_0000); // 执行时间20ms左右
     }
 }

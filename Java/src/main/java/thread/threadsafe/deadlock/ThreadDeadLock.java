@@ -1,4 +1,4 @@
-package thread.threadsafemore.deadlock;
+package thread.threadsafe.deadlock;
 
 import java.util.concurrent.TimeUnit;
 
