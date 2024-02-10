@@ -1,4 +1,4 @@
-package functionalinterface.supplier;
+package skills.functionalinterface.supplier;
 
 import org.junit.jupiter.api.Test;
 

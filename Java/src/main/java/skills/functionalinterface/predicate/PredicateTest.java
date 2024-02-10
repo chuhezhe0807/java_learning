@@ -1,4 +1,4 @@
-package functionalinterface.predicate;
+package skills.functionalinterface.predicate;
 
 import org.junit.jupiter.api.Test;
 

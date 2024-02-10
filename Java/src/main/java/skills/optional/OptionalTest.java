@@ -1,4 +1,4 @@
-package optional;
+package skills.optional;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package functionalinterface.biconsume;
+package skills.functionalinterface.biconsume;
 
 import org.junit.jupiter.api.Test;
 

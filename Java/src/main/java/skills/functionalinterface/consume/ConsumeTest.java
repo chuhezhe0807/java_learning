@@ -1,4 +1,4 @@
-package functionalinterface.consume;
+package skills.functionalinterface.consume;
 
 import org.junit.jupiter.api.Test;
 

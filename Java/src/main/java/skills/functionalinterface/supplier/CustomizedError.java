@@ -1,4 +1,4 @@
-package functionalinterface.supplier;
+package skills.functionalinterface.supplier;
 
 import java.util.function.Supplier;
 

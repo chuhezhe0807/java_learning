@@ -1,4 +1,4 @@
-package optional;
+package skills.optional;
 
 /**
  * ClassName: Student

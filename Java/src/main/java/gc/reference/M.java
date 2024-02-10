@@ -1,4 +1,4 @@
-package reference;
+package gc.reference;
 
 /**
  * ClassName: M
