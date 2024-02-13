@@ -1,4 +1,4 @@
-package generic;
+package skills.generic;
 
 /**
  * 通配符 ?, ? extends E, ? super T

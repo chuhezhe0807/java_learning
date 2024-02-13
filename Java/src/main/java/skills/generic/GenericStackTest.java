@@ -1,4 +1,4 @@
-package generic;
+package skills.generic;
 
 import org.junit.jupiter.api.Test;
 

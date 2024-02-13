@@ -1,4 +1,4 @@
-package generic.genericmatrix;
+package skills.generic.genericmatrix;
 
 /**
  * ClassName: RationalMatrix

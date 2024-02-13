@@ -1,4 +1,4 @@
-package generic.genericmatrix;
+package skills.generic.genericmatrix;
 
 /**
  * 继承Number类提供将表示的数值转换为 byte、double、float、int、long 和 short 的方法。

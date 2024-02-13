@@ -1,4 +1,4 @@
-package generic.genericmatrix;
+package skills.generic.genericmatrix;
 
 import org.junit.jupiter.api.Test;
 
