@@ -1,0 +1,5 @@
+Map 映射 有三个具体的实现类 HashMap、LinkedHashMap、TreeMap
+    HashMap         对于定位一个值，插入一键值对以及删除一个键值对而言是高效的
+    LinkedHashMap   支持Map中的键值对排序，public LinkedHashMap(int initialCapacity, float loadFactor, boolean accessOrder)
+                        可以按照键值对插入Map的顺序排序（insertion order 插入顺序）也可以按照他们最后一次访问的顺序排序（access order 访问顺序）
+    TreeMap         在遍历排好顺序的键时是很高效的

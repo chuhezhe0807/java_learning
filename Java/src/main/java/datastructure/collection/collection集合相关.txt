@@ -1,0 +1,18 @@
+collection 集合
+    · Set 用于存储一组不重复的元素
+    · List  用于存储一个有序元素的集合
+    · Stack 用于存储采用后进先出方式处理的对象
+    · Queue 用于存储采用先进先出方式处理的对象
+    · PriorityQueue 用于存储按照优先级顺序处理的对象
+
+List 的具体实现类
+    ArrayList（实现了 RandomAccess 接口）   如果需要通过下标随机访问元素，而不会再线性表起始位置添加或者删除元素则应选择ArrayList
+    LinkedList（未实现 RandomAccess 接口）  如果需要经常性地在任意位置插入或者删除元素，而不会根据下标随机访问元素则应该使用LinkedList
+
+Set 的具体实现类
+    HashSet         HashSet是无序的，用来存储不重复的元素，添加到HashSet中的元素必须以一种正确分布散列码的方式来实现hashCode方法。
+    LinkedHashSet   可以按照元素插入的LinkedHashSet的顺序获取，不能强加一个不同的顺序。如果不需要维护元素插入时的顺序，就应该使用HashSet，更加高效
+    TreeSet         TreeSet implements NavigableSet, NavigableSet extends SortedSet TreeSet 中的元素需要是可以相互比较的(Comparable或Comparator)
+
+
+    在无重复元素进行排序方面，Set比List更加高效。List在通过索引来访问元素方面非常有用。
