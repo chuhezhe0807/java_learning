@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
  * @Create 2023/12/24 18:51
  * @Version 1.0
  */
-public class GetMax {
+public class GetMaxTest {
     public static int getMax(int[] arr) {
         return process(arr, 0, arr.length - 1);
     }
