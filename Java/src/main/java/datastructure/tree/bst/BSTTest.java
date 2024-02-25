@@ -1,5 +1,6 @@
 package datastructure.tree.bst;
 
+import datastructure.tree.TreeNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

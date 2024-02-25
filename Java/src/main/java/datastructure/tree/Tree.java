@@ -1,4 +1,4 @@
-package datastructure.tree.bst;
+package datastructure.tree;
 
 import java.util.Collection;
 

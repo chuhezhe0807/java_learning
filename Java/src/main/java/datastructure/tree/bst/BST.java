@@ -1,5 +1,8 @@
 package datastructure.tree.bst;
 
+import datastructure.tree.Tree;
+import datastructure.tree.TreeNode;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -58,30 +61,31 @@ public class BST<E extends Comparable<E>> implements Tree<E>{
         if(root == null) {
             root = createNewNode(e);
         }
+        else {
+            TreeNode<E> parent = null;
+            TreeNode<E> current = root;
 
-        TreeNode<E> parent = null;
-        TreeNode<E> current = root;
-
-        while(current != null) {
-            if(e.compareTo(current.element) < 0) {
-                parent = current;
-                current = current.left;
+            while(current != null) {
+                if(e.compareTo(current.element) < 0) {
+                    parent = current;
+                    current = current.left;
+                }
+                else if(e.compareTo(current.element) > 0) {
+                    parent = current;
+                    current = current.right;
+                }
+                else {
+                    // 重复的Node不允许添加
+                    return false;
+                }
             }
-            else if(e.compareTo(current.element) > 0) {
-                parent = current;
-                current = current.right;
+
+            if(e.compareTo(parent.element) < 0) {
+                parent.left = createNewNode(e);
             }
             else {
-                // 重复的Node不允许添加
-                return false;
+                parent.right = createNewNode(e);
             }
-        }
-
-        if(e.compareTo(parent.element) < 0) {
-            parent.left = createNewNode(e);
-        }
-        else {
-            parent.right = createNewNode(e);
         }
 
         size++;
@@ -264,7 +268,7 @@ public class BST<E extends Comparable<E>> implements Tree<E>{
         return root;
     }
 
-    // 查找指定元素需要查找的路径
+    // 查找指定元素需要查找的路径（从root开始到目标元素的查找路径）
     public ArrayList<TreeNode<E>> path(E e) {
         ArrayList<TreeNode<E>> list = new ArrayList<>();
         TreeNode<E> current = root;

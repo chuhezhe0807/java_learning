@@ -1,4 +1,4 @@
-package datastructure.tree.bst;
+package datastructure.tree;
 
 /**
  * ClassName: TreeNode
@@ -10,9 +10,9 @@ package datastructure.tree.bst;
  * @Version 1.0
  */
 public class TreeNode<E> {
-    protected E element;
-    protected TreeNode<E> left;
-    protected TreeNode<E> right;
+    public E element;
+    public TreeNode<E> left;
+    public TreeNode<E> right;
 
     public TreeNode(E e) {
         this.element = e;
