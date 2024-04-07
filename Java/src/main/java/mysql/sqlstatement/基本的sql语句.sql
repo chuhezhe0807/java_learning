@@ -24,3 +24,26 @@ DROP DATABASE `test01`;
 
 # 恢复数据库（注意 进入MySQL命令行再执行） 或直接粘贴到SQL编辑器中执行
 # source D:\WorkSpace_BackEnd\MySQL\bak\20240406.sql
+
+# 创建表
+CREATE TABLE `user_cmd` (
+    `id` int(11),
+    `name` varchar(255),
+    `password` varchar(255),
+    `birthday` date
+)
+    CHARACTER SET utf8 COLLATE utf8_bin;
+
+# 表数范围 没有指定 unsinged 则tinyint就是有符号的
+CREATE TABLE test01.t2 (
+    `id` TINYINT
+);
+
+# 向表中新添加字段（添加到表的末尾）unsigned 无符号 tinyint
+# ALTER TABLE test01.t2 ADD age TINYINT unsigned FIRST 添加到表的开头
+# ALTER TABLE test01.t2 ADD age TINYINT unsigned AFTER <已存在的字段名>
+ALTER TABLE test01.t2 ADD age TINYINT unsigned;
+
+INSERT INTO test01.t2 values(0, 255);
+
+SELECT * FROM test01.t2;
