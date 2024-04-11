@@ -98,3 +98,65 @@ CREATE TABLE test01.t5 (
 INSERT INTO test01.t5(birthday, job_time) values('2022-11-11', '2022-11-11 10:10:10');
 
 SELECT * FROM test01.t5;
+
+# 创建表练习
+CREATE TABLE emp (
+    id int,
+    `name` varchar(32),
+    sex char(1),
+    birthday date,
+    entry_time datetime,
+    job varchar(32),
+    salary double,
+    `resume` text
+) charset utf8 COLLATE utf8_bin ENGINE innodb;
+
+INSERT INTO emp values(1, '小张', '男', '1995-11-21', '2023-1-1 13:13:13', '数据库管理员', 9000.0, '个人简介');
+
+DESC emp; -- 查看表结构，可以查看列信息
+
+ALTER TABLE emp ADD COLUMN image varchar(32) AFTER `resume`;
+
+ALTER TABLE emp MODIFY COLUMN `job` varchar(60);
+
+ALTER TABLE emp DROP COLUMN `sex`;
+
+ALTER TABLE	emp CHARACTER SET utf8;
+
+ALTER TABLE emp CHANGE COLUMN `name` `user_name` varchar(32); -- 修改列名称
+
+ALTER TABLE emp RENAME TO `emp1`; -- 修改表名称
+
+# 演示update语句
+UPDATE emp SET salary = 5000; -- 如果没有带 WHERE 则会对所有记录进行修改
+
+UPDATE emp SET salary = 3000 WHERE user_name = '小李';
+
+UPDATE emp SET salary = salary + 1000, resume = 'new resume' WHERE user_name = '小张'; -- 修改多个字段可以用 , 隔开
+
+# 使用 DELETE 语句仅能删除记录本身，不能删除表。如果需要删除表，则需要使用 DROP TABLE [table_name] 语句
+DELETE FROM emp WHERE user_name = '小张2'; -- 删除记录，如果不带 where 则会删除所有记录
+
+# SELECT 语句
+CREATE TABLE `student` (
+       id int NOT NULL DEFAULT 1,
+       name varchar(20) NOT NULL DEFAULT '',
+       chinese float NOT NULL DEFAULT 0.0,
+       english float NOT NULL DEFAULT 0.0,
+       math float NOT NULL DEFAULT 0.0
+);
+
+# LIKE 后面的 % 是占位用的
+SELECT * FROM `student` WHERE (chinese + english + math) > 200 AND math < chinese AND `name` LIKE '%江';
+
+SELECT * FROM `student` WHERE english BETWEEN 80 AND 90; -- between ... and ... 是闭区间
+
+SELECT * FROM `student` WHERE math = 89 OR math = 90 OR math = 91;
+
+# 上面的语句也可以写成这样
+SELECT * FROM `student` WHERE math IN (89, 90, 91);
+
+# order by 默认就是 aes 升序，可以省略
+SELECT * FROM `student` ORDER BY math DESC, english;
+
+SELECT `name`, (chinese + math + english) AS total_score FROM `student` ORDER BY total_score DESC;

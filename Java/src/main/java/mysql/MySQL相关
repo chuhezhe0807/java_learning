@@ -40,3 +40,22 @@ SQL语句
         field 指定列名 datatype 指定列的类型
         character set 如不指定则为所在数据库字符集
         collate 如不指定则为所在数据校对规则
+
+    修改表
+        添加列 ALTER TABLE table_name ADD (column datatype [DEFAULT expr] [, column datatype]...)
+        修改列 ALTER TABLE table_name MODIFY (column datatype [DEFAULT expr] [, column datatype]...)
+        删除列 ALTER TABLE table_name DROP (column)
+        查看表的结构 DESC table_name -- 可以查看表的所有的列
+        修改表名 RENAME TABLE table_name1 TO table_name2
+        修改表字符集 ALTER TABLE table_name CHARACTER SET 字符集
+
+    修改记录
+        UPDATE tablename SET column1 = new_column1, column2 = new_column2 [, column3 = new_column3...] WHERE condition1 AND condition2; (也可以使用 ... WHERE condition1 OR condition2)
+
+    查询记录
+        SELECT [DISTINCT] *|[column1 | expression, column2 | expression, column3 | expression...] FROM table_name;
+        column 指定列名，* 代表查询所有列，FROM 指定查询那张表，DISTINCT 可选，指显示结果时，是否去掉重复数据
+        SELECT column_name as 别名 FROM 表名; -- 可以取别名
+
+        使用 order by 子句排序查询结果 asc 升序，desc 降序
+        SELECT column1, column2, column3... FROM table_name; order by column asc|desc, ...
