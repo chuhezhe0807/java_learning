@@ -160,3 +160,89 @@ SELECT * FROM `student` WHERE math IN (89, 90, 91);
 SELECT * FROM `student` ORDER BY math DESC, english;
 
 SELECT `name`, (chinese + math + english) AS total_score FROM `student` ORDER BY total_score DESC;
+
+# count 函数
+SELECT count(*) FROM `student`;
+
+SELECT count(*) FROM `student` WHERE english > 90;
+
+SELECT count(*) FROM `student` WHERE (chinese + math + english) > 250;
+
+# sum 函数
+SELECT sum(math), sum(chinese) FROM `student`;
+
+SELECT (sum(chinese) / count(chinese)) AS chinese_average_score FROM `student`;
+
+# avg 函数
+SELECT avg(chinese), avg(math), avg(english) FROM `student`;
+
+SELECT avg(chinese + math + english) FROM `student`;
+
+# max min
+SELECT max(chinese), max(math), max(english) FROM `student`;
+
+SELECT min(chinese), min(math), min(english) FROM `student`;
+
+
+create table employee(
+     empno mediumint  unsigned not null default 0,
+     ename varchar(20) not null default '',
+     job varchar(9) not null default '',
+     mgr mediumint unsigned,
+     hiredate date not null,
+     sal decimal(7,2) not null,
+     comm decimal(7,2),
+     deptno mediumint unsigned not null default 0
+);
+
+INSERT INTO employee VALUES(7369,'SMITH','CLERK',7902,'1990-12-17',800.00,NULL,20),
+       (7499,'ALLEN','SALESMAN',7698,'1991-2-20',1600.00,300.00,30),
+       (7521,'WARD','SALESMAN',7968,'1991-2-22',1250.00,500.00,30),
+       (7566,'JONES','MANAGER',7839,'1991-4-2',2975.00,NULL,20),
+       (7654,'MARTIN','SALESMAN',7968,'1991-9-28',1250.00,1400.00,30),
+       (7698,'BLAKE','MANAGER',7839,'1991-5-1',2850.00,NULL,30),
+       (7782,'CLARK','MANAGER',7839,'1991-6-9',2450.00,NULL,10),
+       (7788,'SCOTT','ANALYST',7566,'1991-4-19',3000.00,NULL,20),
+       (7839,'KING','PRESIDENT',NULL,'1991-11-17',5000.00,NULL,10),
+       (7844,'TURNER','SALESMAN',7698,'1991-9-8',1500.00,NULL,30),
+       (7900,'JAMES','CLERK',7698,'1991-12-3',950.00,NULL,30),
+       (7902,'FORD','ANALYST',7566,'1991-12-3',3000.00,NULL,20),
+       (7934,'MILLER','CLERK',7782,'1991-1-23',1300.00,NULL,10);
+
+
+CREATE TABLE dept (
+      deptno MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+      dname varchar(20) NOT NULL DEFAULT '',
+      loc varchar(13) NOT NULL DEFAULT ''
+);
+
+INSERT INTO dept values(10, 'ACCOUNTING', 'NEW YORK'),
+       (20, 'RESEARCH', 'DALLAS'),
+       (30, 'SALES', 'CHICAGO'),
+       (40, 'OPERATIONS', 'BOSTON');
+
+# 工资级别表
+CREATE TABLE salgrade (
+      grade MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+      low_salary decimal(17, 2) NOT NULL,
+      high_salary decimal(17, 2) NOT NULL
+);
+
+INSERT INTO salgrade values(1, 700, 1200);
+INSERT INTO salgrade values(2, 1201, 1400);
+INSERT INTO salgrade values(3, 1401, 2000);
+INSERT INTO salgrade values(4, 2001, 3000);
+INSERT INTO salgrade values(5, 3001, 999);
+
+ALTER TABLE salgrade RENAME TO salary_grade;
+
+# ALTER TABLE salary_grade CHANGE COLUMN `grade1` `grade` MEDIUMINT;
+
+# 按照部门来分组查询平均工资和最低工资，按照部门分组的意思是汇总统计employee表中deptno相同的记录
+SELECT avg(sal), min(sal), deptno FROM `employee` GROUP BY deptno;
+
+# 显示每个部门的每种岗位的平均工资和最低工资
+SELECT avg(sal), min(sal), deptno, job FROM `employee` GROUP BY deptno, job;
+
+# 显示平均工资低于2000的部门号和它的平均工资（使用别名）
+SELECT deptno, avg(sal) AS avg_sal FROM `employee` GROUP BY deptno HAVING avg_sal < 2000;

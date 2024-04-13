@@ -59,3 +59,21 @@ SQL语句
 
         使用 order by 子句排序查询结果 asc 升序，desc 降序
         SELECT column1, column2, column3... FROM table_name; order by column asc|desc, ...
+
+    合计/统计函数 - count、sum
+        count 返回行的总数 SELECT count(*) | count(column) from table_name [where condition]
+        count(*) 返回满足条件的记录有多少行 count(列) 返回满足条件的列的记录有多少行，但是会排除为null的记录
+
+        sum 返回满足条件的行的和，一般是用在数值列
+        SELECT SUM(列名) {, SUM(列名)...} FROM table_name [WHERE condition]
+
+        avg 返回满足where条件的一列的平均值
+        SELECT avg(列名) {, avg(列名)...} FROM table_name [WHERE condition]
+
+        max 返回最大值 min 返回最小值
+
+    group by 子句对列进行分组，用于对查询的结果分组统计
+        SELECT column1, column2, column3... FROM table_name GROUP BY column;
+
+    having 子句对分组后的结果进行过滤，用于限制分组显示结果
+        SELECT column1, column2, column3... FROM table_name GROUP BY column HAVING 。。。。
