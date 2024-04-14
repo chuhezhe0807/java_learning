@@ -246,3 +246,41 @@ SELECT avg(sal), min(sal), deptno, job FROM `employee` GROUP BY deptno, job;
 
 # 显示平均工资低于2000的部门号和它的平均工资（使用别名）
 SELECT deptno, avg(sal) AS avg_sal FROM `employee` GROUP BY deptno HAVING avg_sal < 2000;
+
+# 字符串函数
+# CHARSET(str) 返回字串字符集
+SELECT charset(ename) FROM `employee`;
+
+# CONCAT(string2, [, ...]) 连接字符串
+SELECT concat(ename, '-', job) FROM `employee`;
+
+# INSTR(string, substring) 返回substring在string中出现的位置(字符串中的第一个在字符串中的位置是1)，没有返回0（是否区分大小写跟随表的校对规则走）
+SELECT instr(ename, 'a') FROM `employee`;
+SELECT instr(ename, 'A') FROM `employee`;
+
+# UCASE 转换成大写 LCASE 转换成小写
+SELECT lcase(ename) FROM `employee`;
+
+# LEFT(string2, length) RIGHT(string2, length) 从string2中的左/右边取length个字符
+SELECT left(ename, 2) FROM `employee`;
+
+# REPLACR（str, search_str, replace_str） 在str中永replace_str替换search_str
+SELECT REPLACE(ename, 'LL', '0009') FROM `employee`;
+
+# STRCMP(string1, string2) 逐字符比较两个字符串，如果这两个字符串相等返回0，如果第一个参数是根据当前的排序小于第二个参数顺序返回-1，否则返回1。
+
+
+# SUBSTRING(str, position [, length]) 从str的position开始（position是从1开始计算的），取length个字符
+SELECT substring(ename, 2, 2) FROM `employee`;
+
+# LTRIM(string2) RTRIM(string2) 去除字符串左端或右端的空格 TRIM(string2) 去除左右两边的空格
+SELECT ltrim(ename) FROM `employee`;
+
+# DUAL 是亚元表，系统表，可以作为测试表使用
+SELECT instr('xiaozhang', 'o') FROM DUAL; -- 4
+
+# LENGTH(string) 返回字符串的长度(按照字节)
+SELECT length('小张') FROM DUAL; -- 6 按照字节返回
+
+# 以首字母小写的方式显示所有员工employee表的姓名
+SELECT concat(lcase(LEFT(ename, 1)), substring(ename, 2)) FROM `employee`;
