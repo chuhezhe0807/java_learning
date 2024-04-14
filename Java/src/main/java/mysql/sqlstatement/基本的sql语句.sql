@@ -284,3 +284,98 @@ SELECT length('小张') FROM DUAL; -- 6 按照字节返回
 
 # 以首字母小写的方式显示所有员工employee表的姓名
 SELECT concat(lcase(LEFT(ename, 1)), substring(ename, 2)) FROM `employee`;
+
+# 演示数学相关函数
+# ABS(num) 绝对值
+SELECT abs(-1) FROM DUAL;
+
+# BIN(decimal_number) 十进制转二进制
+SELECT bin(12) FROM DUAL;
+
+# CEiLING(number2) 向上取整 FLOOR(number2) 向下取整
+SELECT ceiling(0.1) FROM DUAL;
+
+# CONV(number2, from_base, to_base) 进制转换
+SELECT conv(1100, 2, 10) FROM DUAL;
+SELECT conv(12, 10, 2) FROM DUAL;
+
+# FORMAT(number, decimal_places) 保留小数位数(四舍五入)
+SELECT format(12.12345, 3) FROM DUAL;
+
+# HEX(decimal_number) 将一个字符串或数字转换为十六进制格式的字符串
+# unhex() 把十六进制字符串转换为原来的格式
+SELECT hex('12a') FROM DUAL; -- 313261
+SELECT unhex(313261) FROM DUAL; -- '12a'
+
+# LEAST(number1, number2, [,...]) 求最小值
+SELECT least(0, -1, 2, -2) FROM DUAL;
+
+# MOD(numerator(分子), denominator(分母)) 求余
+SELECT mod(12, 5) FROM DUAL; -- 2
+
+# RAND([seed]) 返回随机数，范围为[0, 1]，使用seed参数后，每一次返回的随机数都是确定的
+SELECT rand() FROM DUAL; -- 每执行一次都不一样
+SELECT rand(3) FROM DUAL; -- 就会一直是指定的随机数
+
+# 时间日期相关的函数
+# CURRENT_DATE() 当前日期 CURRENT_TIME() 当前时间 CURRENT_TIMESTAMP() 当前时间戳
+SELECT current_date() FROM DUAL;
+SELECT current_time() FROM DUAL;
+SELECT current_timestamp() FROM DUAL;
+
+# DATE(datetime) 返回datetime的日期部分
+SELECT date('2024-04-14 16:41:23') FROM DUAL;
+
+# DATE_ADD(date2, INTERVAL d_value d_type) 在date2中加上日期或时间
+# DATE_SUB(date2, INTERVAL d_value d_type) 在date2中减去上日期或时间 可以是 date, datetime 和 timestamp
+SELECT date_add(now(), interval 10 day) from dual;
+
+# DATEDIFF(date1, date2) 两个日期差（结果是天）
+SELECT datediff('2024-04-14', '2024-03-14') FROM DUAL;
+
+# TIMEDIFF(date1, date2) 两个时间差（多少小时多少分钟多少秒）
+SELECT timediff('2024-04-14 16:41:23', '2024-03-14 16:41:23') FROM DUAL;
+
+# NOW() 当前时间 CURRENT_TIMESTAMP() 作用与NOW()一致
+# now()函数获得的是语句开始执行时的时间，而sysdate()函数是这个函数执行时候的时间
+SELECT now() FROM DUAL;
+
+-- 创建测试表
+CREATE TABLE `test_msg` (
+    id int,
+    content varchar(10),
+    send_time datetime
+);
+
+INSERT INTO `test_msg` values(1, '北京新闻', current_timestamp());
+INSERT INTO `test_msg` values(2, '上海新闻', current_timestamp());
+INSERT INTO `test_msg` values(3, '广州新闻', current_timestamp());
+INSERT INTO `test_msg` values(4, '成都新闻', current_timestamp());
+
+# 显示所有留言信息，发布日期只显示日期，不用显示时间
+SELECT id, content, date(send_time) FROM `test_msg`;
+
+# 查询在10分钟内发布的帖子
+SELECT * FROM `test_msg`
+    WHERE date_add(send_time, INTERVAL 10 MINUTE) >= now();
+SELECT * FROM `test_msg`
+    WHERE date_sub(now(), interval 10 minute) <= send_time;
+
+# 2011-11-11 和 2000-1-1 相差多少天
+SELECT datediff('2011-11-11', '2000-1-1') FROM DUAL;
+
+# 一个1980-1-1出生的人如果能够活到80岁，那么它还可以或多少天？
+SELECT datediff(date_add('1980-1-1', interval 80 year), now()) from dual;
+
+# YEAR|MONTH|DAY (datetime)
+SELECT year(now()) FROM DUAL;
+SELECT month(now()) FROM DUAL;
+SELECT day(now()) FROM DUAL;
+
+# unix_timestamp([datetime]) 返回的是1970-1-1到现在(或datetime)的秒数
+SELECT unix_timestamp() FROM DUAL;
+
+# FROM_UNIXTIME() 可以把一个unix_timestamp秒数，转成指定格式的日期
+# %Y-%m-%d 是规定好的，表示 年月日
+SELECT from_unixtime(1713092171, '%Y-%m-%d') FROM DUAL;
+SELECT from_unixtime(1713092171, '%Y-%m-d %H:%i:%s') FROM DUAL;
