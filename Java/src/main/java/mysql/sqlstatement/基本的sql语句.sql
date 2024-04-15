@@ -379,3 +379,29 @@ SELECT unix_timestamp() FROM DUAL;
 # %Y-%m-%d 是规定好的，表示 年月日
 SELECT from_unixtime(1713092171, '%Y-%m-%d') FROM DUAL;
 SELECT from_unixtime(1713092171, '%Y-%m-d %H:%i:%s') FROM DUAL;
+
+# 演示加密函数和系统函数
+# USER() 查询用户 可以查看登录到mysql的有哪些用户，登录的ip
+SELECT user() FROM DUAL;
+
+# 数据库名称
+SELECT DATABASE() FROM DUAL;
+
+# password(str) 加密（mysql存储的密码就使用password加密的）
+SELECT password('root') FROM DUAL;
+SELECT * FROM mysql.USER;
+
+# MD5(str) 为字符串计算出一个MD5 32的字符串，用于用户密码等的加密
+SELECT MD5('xiaozhang') FROM DUAL;
+
+CREATE TABLE test_user(
+      id int,
+      `name` varchar(32) NOT NULL DEFAULT '',
+      pwd char(32) NOT NULL DEFAULT ''
+);
+
+INSERT INTO `test_user` values(1, 'xiaozhang', md5('xiaozhang'));
+INSERT INTO `test_user` values(2, '张三', md5('123aaawe1'));
+INSERT INTO `test_user` values(3, '李四', md5('8888aaa'));
+
+SELECT * FROM `test_user` WHERE `name` = '张三' AND pwd = md5('123aaawe1');
