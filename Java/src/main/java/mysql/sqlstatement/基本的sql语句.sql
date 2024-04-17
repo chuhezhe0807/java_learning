@@ -405,3 +405,80 @@ INSERT INTO `test_user` values(2, '张三', md5('123aaawe1'));
 INSERT INTO `test_user` values(3, '李四', md5('8888aaa'));
 
 SELECT * FROM `test_user` WHERE `name` = '张三' AND pwd = md5('123aaawe1');
+
+# 演示流程控制语句
+# IF(expr1, expr2, expr3) 如果expr1为true，则返回expr2，否则返回expr3
+SELECT if(TRUE, '北京', '上海') FROM DUAL;
+
+# IFNULL(expr1, expr2) 如果expr1不为null则返回expr1，否则返回expr2
+SELECT ifnull(NULL, 'xiaozhang') FROM DUAL;
+SELECT ifnull('NULL', 'xiaozhang') FROM DUAL;
+
+# case when expr1 then expr2 when expr3 then expr4 else expr5
+SELECT CASE
+   WHEN TRUE THEN '1'
+   WHEN FALSE THEN '2'
+   ELSE '3'
+   END;
+
+# 查询employee表，如果comm是null，则显示0.0   判断是否为null需要使用 is. eg: if(comm is null, expr1, expr2)
+SELECT ename, if(comm IS NULL, 0.0, comm) AS 'comm' FROM `employee`;
+
+# 如果 employee 表的job是 CLERK 则显示 职员，如果是 MANAGER 则显示经理，如果是 SALESMAN 则显示 销售人员，其他正常显示
+SELECT ename, (CASE
+       WHEN job = 'CLERK' THEN '职员'
+       WHEN job = 'MANAGER' THEN '经理'
+       WHEN job = 'SALESMAN' THEN '销售人员'
+       ELSE job
+    END) AS 'job'
+FROM `employee`;
+
+# 查询1991-06-01后入职的员工 mysql 中日期类型是可以直接比较大小的，注意格式
+SELECT * FROM `employee` WHERE hiredate > '1991-06-01';
+
+# like 模糊查询，% 表示0到多个任意字符 _ 表示单个任意字符
+# 如何显示首字符为s的员工姓名和工资
+SELECT ename, sal FROM `employee` WHERE ename LIKE 'S%' OR ename LIKE 's%';
+
+UPDATE `employee` SET ename = 'SMITH' WHERE ename = 'sMITH';
+
+SELECT ename, sal FROM `employee` WHERE ename LIKE '__O%';
+
+SELECT ename FROM `employee` WHERE mgr IS NULL;
+
+DESC `employee`;
+
+SELECT * FROM `employee` ORDER BY sal desc;
+
+SELECT * FROM `employee` ORDER BY deptno DESC, sal;
+
+# 分页查询 select ... limit start, rows; 从start+1行开始取，取rows行
+# 按雇员id号升序取出，每页显示3条记录，分别显示第1页，第2页，第3页
+SELECT * FROM `employee` ORDER BY empno LIMIT 0, 3;
+SELECT * FROM `employee` ORDER BY empno LIMIT 3, 3;
+SELECT * FROM `employee` ORDER BY empno LIMIT 6, 3;
+SELECT * FROM `employee` ORDER BY empno DESC LIMIT 10, 5;
+SELECT * FROM `employee` ORDER BY empno DESC LIMIT 20, 5;
+
+# 显示每种岗位的雇员总数、平均工资
+SELECT job, count(*) AS employee_count, avg(sal) FROM `employee` GROUP BY job;
+
+# 显示雇员总数，以及获得补助的雇员总数  count(列) 列如果为null就不会被统计
+SELECT count(*) AS total, count(comm) FROM `employee`;
+SELECT count(*) AS total, count(IF(comm IS NULL, NULL, comm)) FROM `employee`;
+# 没有获得补助的人数
+SELECT count(*) AS total, count(IF(comm IS NULL, 1, null)) FROM `employee`;
+SELECT count(*) AS total, count(*) - count(comm) FROM `employee`;
+
+# 显示管理者的总人数 count([distinct] 列) 也可以去重
+SELECT count(DISTINCT mgr) FROM `employee`;
+
+# 显示工资的最大差额
+SELECT max(sal) - min(sal) FROM `employee`;
+
+# 统计各个部门的平均工资，并且是大于1000的，并且按照平均工资从高到低排序，取出前两行记录
+SELECT deptno, avg(sal) AS avg_sal FROM `employee`
+    GROUP BY deptno
+    HAVING avg_sal > 1000
+    ORDER BY avg_sal DESC
+    LIMIT 0, 2;

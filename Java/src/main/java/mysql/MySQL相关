@@ -61,7 +61,7 @@ SQL语句
         SELECT column1, column2, column3... FROM table_name; order by column asc|desc, ...
 
     合计/统计函数 - count、sum
-        count 返回行的总数 SELECT count(*) | count(column) from table_name [where condition]
+        count 返回行的总数 SELECT count(*) | count([DISTINCT] column) from table_name [where condition]
         count(*) 返回满足条件的记录有多少行 count(列) 返回满足条件的列的记录有多少行，但是会排除为null的记录
 
         sum 返回满足条件的行的和，一般是用在数值列
@@ -77,3 +77,14 @@ SQL语句
 
     having 子句对分组后的结果进行过滤，用于限制分组显示结果
         SELECT column1, column2, column3... FROM table_name GROUP BY column HAVING 。。。。
+
+    分页查询
+        基本语法 select ... limit start, rows 表示从start+1行开始取，去除rows行，start从0开始计算。
+        select ... limit 每页显示记录数 * （第几页 - 1）， 每页显示的记录数
+
+    如果select语句同时包含有group by，having，limit，order by 那么他们的顺序是
+        SELECT column1, column2, column3... FROM table_name
+            GROUP BY column
+            HAVING condition
+            ORDER BY column
+            LIMIT start, rows;
