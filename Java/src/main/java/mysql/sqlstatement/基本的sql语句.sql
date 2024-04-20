@@ -482,3 +482,66 @@ SELECT deptno, avg(sal) AS avg_sal FROM `employee`
     HAVING avg_sal > 1000
     ORDER BY avg_sal DESC
     LIMIT 0, 2;
+
+# 多表查询
+# 显示雇员名称，雇员工资及所在部门的名称(笛卡尔集) 当查询的字段在多张表中都存在时，需要带上表的名称
+SELECT ename, sal, dname, employee.deptno FROM `employee`, `dept`
+    WHERE employee.deptno = dept.deptno;
+
+# 显示部门号为10的部门名，员工名和工资
+SELECT dname, ename, sal FROM `employee`, `dept`
+    WHERE dept.deptno = employee.deptno AND dept.deptno = 10;
+
+# 显示各个员工的姓名，工资，及其工资的级别
+SELECT ename, sal, grade FROM `employee`, `salary_grade`
+    WHERE sal BETWEEN low_salary AND high_salary;
+
+# 显示雇员名称，雇员工资及所在部门的名字，并按部门号降序排序
+SELECT ename, sal, dname, dept.deptno FROM `employee`, `dept`
+    WHERE employee.deptno = dept.deptno
+    ORDER BY dept.deptno DESC;
+
+# 显示公司员工和他上级的名字
+SELECT emp1.ename AS emp_name, emp2.ename AS mgr_name
+    FROM `employee` emp1, `employee` emp2
+    WHERE emp1.mgr = emp2.empno;
+
+# 显示与SMITH同一部门的所有员工 注意直接等于子查询的语句时，需要保证查出来的值只有一个
+SELECT * FROM `employee`
+    WHERE deptno = (
+        SELECT deptno FROM `employee` WHERE ename = 'SMITH'
+    );
+
+# 查询和部门10的工作相同的雇员的名字、岗位、工资、部门号、但是不含10号部门自己的雇员
+SELECT DISTINCT job FROM `employee` WHERE deptno = 10;
+    SELECT ename, job, sal, deptno FROM `employee`
+    WHERE job IN (
+        SELECT DISTINCT job FROM `employee` WHERE deptno = 10
+    ) AND deptno != 10;
+
+INSERT INTO `employee` values(7369,'SMITH','CLERK',7902,'1990-12-17',800.00,NULL,10);
+DELETE FROM `employee` WHERE ename = 'SMITH' AND deptno = 10;
+
+# 查询每一个工作类别中工资最高的人的名称及其工资
+SELECT job, ename, sal FROM `employee`
+    WHERE sal IN (
+        SELECT max(sal) FROM `employee` GROUP BY job
+    );
+
+# 显示工资比部门号为30的部门的所有员工的工资高的员工的姓名
+SELECT ename, sal, deptno FROM `employee`
+    WHERE sal > (
+        SELECT max(sal) FROM `employee` WHERE deptno = 30
+    );
+SELECT ename, sal, deptno FROM `employee`
+    WHERE sal > all(SELECT sal FROM `employee` WHERE deptno = 30);
+
+# 显示工资比部门30的其中一个员工的工资高的员工的姓名、工资和部门号
+SELECT ename, sal, deptno FROM `employee`
+    WHERE sal > any(
+        SELECT sal FROM `employee` WHERE deptno = 30
+    );
+SELECT ename, sal, deptno FROM `employee`
+    WHERE sal > (
+        SELECT min(sal) FROM `employee` WHERE deptno = 30
+    );
