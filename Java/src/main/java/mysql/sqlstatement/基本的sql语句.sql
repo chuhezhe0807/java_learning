@@ -545,3 +545,29 @@ SELECT ename, sal, deptno FROM `employee`
     WHERE sal > (
         SELECT min(sal) FROM `employee` WHERE deptno = 30
     );
+
+# 多列子查询 指查询返回多个数据的子查询语句
+# 查询ALLEN的部门和岗位完全相同的所有雇员（不包含ALLEN本人）
+SELECT ename, deptno, job FROM `employee`
+WHERE (deptno, job) = (
+    SELECT deptno, job FROM `employee` WHERE ename = 'ALLEN'
+) AND ename != 'ALLEN';
+
+# 查找每个部门工资高于本部门平均工资的人的资料
+SELECT ename, sal, temp.avg_sal, temp.deptno FROM `employee`, (
+    SELECT deptno, avg(sal) AS avg_sal FROM `employee` GROUP BY deptno
+) temp
+WHERE employee.deptno = temp.deptno AND employee.sal > temp.avg_sal;
+
+# 查找每个部门工资最高的人的资料
+SELECT * FROM `employee`, (
+    SELECT deptno, max(sal) AS max_sal FROM `employee` GROUP BY deptno
+) temp
+WHERE employee.deptno = temp.deptno AND employee.sal = temp.max_sal;
+
+# 显示每个部门的信息(包括：部门名，编号，地址)和人员数量
+# 表名.* 表示将表的所有字段都显示出来
+SELECT dept.*, temp.count_dept_emp FROM dept, (
+    SELECT deptno, count(*) AS count_dept_emp FROM `employee` GROUP BY deptno
+) temp
+WHERE dept.deptno = temp.deptno;
