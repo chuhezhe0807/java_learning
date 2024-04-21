@@ -600,3 +600,29 @@ CREATE TABLE my_table02 LIKE employee;
 # union 操作符会去掉重复行
 SELECT ename, job, sal FROM `employee` WHERE sal > 2500 UNION ALL
 SELECT ename, job, sal FROM `employee` WHERE job = 'MANAGER';
+
+# 列出部门名称和这些部门的员工名称和工作，同时要求显示出那些没有员工的部门
+SELECT dept.deptno, dname, ename, job FROM	`employee` RIGHT JOIN `dept`
+                                                                    ON dept.deptno = employee.deptno
+ORDER BY dept.deptno;
+SELECT dept.deptno, dname, ename, job FROM `dept` LEFT JOIN `employee`
+                                                            ON dept.deptno = employee.deptno
+ORDER BY dept.deptno;
+
+# 演示外连接
+CREATE TABLE `join_stu` (id int, `name` varchar(32));
+INSERT INTO `join_stu` VALUES (1, 'jack'), (2, 'tom'), (3, 'kity'), (4, 'nono');
+
+CREATE TABLE `join_exam` (id int, grade int);
+INSERT INTO `join_exam` VALUES (1, 56), (2, 76), (11, 8);
+
+# 使用左连接（显示所有人的成绩，如果没有成绩，也要显示该人的姓名和id号，成绩显示为空）
+SELECT join_stu.id, `name`, grade FROM `join_stu`, `join_exam`
+WHERE join_stu.id = join_exam.id;
+# 使用左外连接
+SELECT join_stu.id, `name`, grade FROM `join_stu` LEFT JOIN `join_exam`
+                                                            ON join_stu.id = join_exam.id;
+
+# 右连接（显示所有成绩，如果没有名字匹配，显示空）
+SELECT join_stu.id, `name`, grade FROM `join_stu` RIGHT JOIN `join_exam`
+                                                             ON join_stu.id = join_exam.id;

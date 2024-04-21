@@ -117,3 +117,11 @@ SQL语句
         union all 该操作符用于取得两个结果的并集，当使用该操作符时，不会取消重复行
         select ename, job, sal from emp where sal > 2500 union all
         select ename, job, sal from emp where job = 'MANAGER';
+
+    外连接（分为左外连接和右外连接）
+        外连接的必要性：
+            多表查询是通过利用where字句对两张表或多张表，形成笛卡尔集进行筛选，根据关联条件，显示所有匹配的记录，匹配不上的不显示，
+            所以就有可能出现关联条件（关联列）数据不一起完全对的上的情况，比如employee表和dept表多表查询时使用deptno字段作为关联条件
+            有可能dept表的deptno有40这条记录，但是employee整张表中都没有deptno为40的记录，这样多表查询就会有匹配不上漏掉的字段
+        左外连接 如果左侧的表完全显示我们就说是左外连接 SELECT ... FROM 表1 LEFT JOIN 表2 ON [condition] (表1就是左表，因为他在左边)
+        右外连接 如果右侧的表完全显示我们就说是右外连接 SELECT ... FROM 表1 RIGHT JOIN 表2 ON [condition] (表1就是左表，因为他在左边)
