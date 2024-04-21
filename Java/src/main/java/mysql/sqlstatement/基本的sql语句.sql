@@ -571,3 +571,32 @@ SELECT dept.*, temp.count_dept_emp FROM dept, (
     SELECT deptno, count(*) AS count_dept_emp FROM `employee` GROUP BY deptno
 ) temp
 WHERE dept.deptno = temp.deptno;
+
+# 表的复制
+CREATE TABLE my_table01 (
+    id int,
+    `name` varchar(32),
+    sal double,
+    job varchar(32),
+    deptno int
+);
+
+DESC my_table01;
+
+# 把employee表的数据复制到my_table01
+INSERT INTO my_table01 (id, `name`, sal, job, deptno)
+SELECT empno, ename, sal, job, deptno FROM `employee`;
+
+# 自我复制
+INSERT INTO my_table01 SELECT * FROM my_table01;
+
+# 删除掉一张表中的重复记录 把该表复制到另一张表中（distinct），删除该表（drop），再把复制到的表重命名为该表即可
+
+# 创建一张表使用指定表的列结构
+CREATE TABLE my_table02 LIKE employee;
+
+# 合并查询 union all 和 union
+# union all 该操作符用于取得两个结果的并集，当使用该操作符时，不会取消重复行
+# union 操作符会去掉重复行
+SELECT ename, job, sal FROM `employee` WHERE sal > 2500 UNION ALL
+SELECT ename, job, sal FROM `employee` WHERE job = 'MANAGER';

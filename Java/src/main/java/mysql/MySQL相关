@@ -110,3 +110,10 @@ SQL语句
 
     多列子查询
         多列子查询是指查询返回多个列数据的子查询语句
+
+    合并查询
+        为了合并多个select语句的结果，可以使用集合操作符号 union, union all
+
+        union all 该操作符用于取得两个结果的并集，当使用该操作符时，不会取消重复行
+        select ename, job, sal from emp where sal > 2500 union all
+        select ename, job, sal from emp where job = 'MANAGER';
