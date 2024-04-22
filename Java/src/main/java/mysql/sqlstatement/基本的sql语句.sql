@@ -723,3 +723,12 @@ CREATE TABLE `shop_purchase` (
 
 DESC `shop_purchase`;
 SHOW CREATE TABLE `shop_goods`; -- 查看表的创建语句，可以知道表的约束情况
+
+# 自增长
+CREATE TABLE `test03` (
+          `id` int PRIMARY KEY AUTO_INCREMENT,
+          `name` varchar(32) NOT NULL DEFAULT ''
+);
+INSERT INTO `test03` VALUES (NULL, 'tom');
+INSERT INTO `test03` VALUES (NULL, 'jack');
+INSERT INTO `test03` (`name`) VALUES ('jery');
