@@ -626,3 +626,100 @@ SELECT join_stu.id, `name`, grade FROM `join_stu` LEFT JOIN `join_exam`
 # 右连接（显示所有成绩，如果没有名字匹配，显示空）
 SELECT join_stu.id, `name`, grade FROM `join_stu` RIGHT JOIN `join_exam`
                                                              ON join_stu.id = join_exam.id;
+
+
+# 约束
+# primary key
+CREATE TABLE `test01` (id int PRIMARY KEY, `name` varchar(32), email varchar(32));
+INSERT INTO `test01` VALUES (1, 'xiaozhang', 'xiaozhang@163.com');
+INSERT INTO `test01` VALUES (2, '李四', '李四@163.com');
+INSERT INTO `test01` VALUES (1, '王五', '王五@163.com'); -- 报错，主键不能重复
+
+CREATE TABLE `test02` (
+      id int,
+      `name` varchar(32),
+      email varchar(32),
+      PRIMARY KEY (id, name) -- 这就是复合主键(两个列合起来才是主键)，添加数据时只有这两个值都相同才会报错
+);
+INSERT INTO `test02` VALUES (1, 'xiaozhang', 'xiaozhang@163.com');
+INSERT INTO `test02` VALUES (2, '李四', '李四@163.com');
+INSERT INTO `test02` VALUES (1, '王五', '王五@163.com'); -- 不报错，因为是id、name两个字段组合起来为主键
+INSERT INTO `test02` VALUES (1, '王五', '王五11@163.com'); -- 报错
+DESC `test02`;
+
+# 修改 test02.name 为 unique
+ALTER TABLE test02 MODIFY COLUMN `name` varchar(32) UNIQUE;
+INSERT INTO `test02` VALUES (3, 'xiaozhang', 'zz@163.com');
+
+# 演示外键
+# 创建主表
+CREATE TABLE foreign_key_class (
+       id int PRIMARY KEY,
+       `name` varchar(32) NOT NULL DEFAULT ''
+);
+
+# 创建从表
+CREATE TABLE foreign_key_stu (
+         id int PRIMARY KEY,
+         `name` varchar(32) NOT NULL DEFAULT '',
+         class_id int,
+         -- 下面指定外键关系
+         FOREIGN KEY (class_id) REFERENCES foreign_key_class(id)
+);
+
+# 插入数据
+INSERT INTO foreign_key_class VALUES (100, 'java'), (200, 'web');
+INSERT INTO foreign_key_stu VALUES (1, 'tom', 100);
+INSERT INTO foreign_key_stu VALUES (2, 'jack', 200);
+INSERT INTO foreign_key_stu VALUES (3, 'jery', 300); -- 插入失败，外键指向的主表中没有300号班级
+# 修改已经插入的外键的值为主键字段没有出现过的值 受外键约束不能成功
+UPDATE foreign_key_stu SET class_id = 300
+WHERE id = 2;
+
+# 演示check mysql5.7 目前还不支持check，只做语法校验，但不会生效
+CREATE TABLE check_table (
+         id int PRIMARY KEY,
+         `name` varchar(32),
+         sex varchar(6) CHECK (sex IN ('man', 'woman')),
+         sal double CHECK (sal > 1000 AND sal < 2000)
+);
+
+INSERT INTO `check_table` VALUES (1, 'xiaozhang', 'mid', 1); -- check未生效，仍然能够添加成功
+
+# 新建商店数据库相关的商品goods、客户customer和购买purchase三张表
+CREATE TABLE `shop_customer` (
+         `customer_id` int PRIMARY KEY,
+         `name` varchar(32) NOT NULL DEFAULT '',
+         `address` varchar(60),
+         `email` varchar(32) UNIQUE,
+         `sex` char(1) CHECK (`sex` IN ('男', '女')),
+         `card_id` char(18) UNIQUE
+);
+ALTER TABLE `shop_customer` MODIFY COLUMN
+    `sex` enum('男', '女') NOT NULL; -- 使用枚举实现（mysql中生效）
+SHOW CREATE TABLE `shop_customer`;
+
+CREATE TABLE `shop_goods` (
+          `goods_id` int PRIMARY KEY,
+          `goods_name` varchar(60) NOT NULL DEFAULT '',
+          `unitprice` double CHECK (`unitprice` BETWEEN 1.0 AND 9999.99),
+          `category` varchar(32),
+          `provider` varchar(32) NOT NULL DEFAULT ''
+);
+ALTER TABLE `shop_goods` MODIFY COLUMN
+    `unitprice` decimal(10, 2) NOT NULL DEFAULT 1.0;
+ALTER TABLE `shop_goods` MODIFY COLUMN
+    `category` int NOT NULL DEFAULT 0; -- 设计的表字段不要为空，都加上not NULL DEFAULT
+SHOW CREATE TABLE `shop_goods`;
+
+CREATE TABLE `shop_purchase` (
+         `order_id` int PRIMARY KEY,
+         `customer_id` int NOT NULL DEFAULT 0,
+         `goods_id` int NOT NULL DEFAULT 0,
+         `nums` int UNSIGNED NOT NULL DEFAULT 0,
+         CONSTRAINT `purchase_customer` FOREIGN KEY (`customer_id`) REFERENCES `shop_customer` (`customer_id`),
+         CONSTRAINT `purchase_goods` FOREIGN KEY (`goods_id`) REFERENCES `shop_goods` (`goods_id`)
+);
+
+DESC `shop_purchase`;
+SHOW CREATE TABLE `shop_goods`; -- 查看表的创建语句，可以知道表的约束情况
