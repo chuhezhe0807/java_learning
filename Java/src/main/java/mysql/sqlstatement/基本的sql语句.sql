@@ -732,3 +732,31 @@ CREATE TABLE `test03` (
 INSERT INTO `test03` VALUES (NULL, 'tom');
 INSERT INTO `test03` VALUES (NULL, 'jack');
 INSERT INTO `test03` (`name`) VALUES ('jery');
+
+# 索引
+CREATE TABLE `index_table01` (
+     `id` int,
+     `name` varchar(32)
+);
+# 添加普通索引
+CREATE INDEX `index01` ON `index_table01` (`id`);
+ALTER TABLE `index_table01` ADD INDEX `index02` (`name`);
+
+# 删除索引
+DROP INDEX `index01` ON `index_table01`;
+DROP INDEX `index02` ON `index_table01`;
+
+# 添加unique索引
+CREATE UNIQUE INDEX `unique_index01` ON `index_table01` (`name`);
+
+# 添加主键索引
+ALTER TABLE `index_table01` ADD PRIMARY KEY (`id`);
+
+# 删除主键索引
+ALTER TABLE `index_table01` DROP PRIMARY KEY;
+
+# 查询表的索引 show keys from table_name show index from table_name 都可以查询表的索引
+SHOW KEYS FROM `index_table01`;
+SHOW INDEX FROM `index_table01`;
+
+SHOW CREATE TABLE `index_table01`;
