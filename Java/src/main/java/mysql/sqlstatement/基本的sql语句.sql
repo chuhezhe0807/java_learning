@@ -760,3 +760,43 @@ SHOW KEYS FROM `index_table01`;
 SHOW INDEX FROM `index_table01`;
 
 SHOW CREATE TABLE `index_table01`;
+
+# 事务
+# 1、创建表
+CREATE TABLE `transaction_table` (
+     `id` int PRIMARY KEY,
+     `name` varchar(32)
+);
+
+# 2、开启事务
+START TRANSACTION;
+
+# 3、设置保存点
+SAVEPOINT a;
+
+# 4、执行dml语句
+INSERT INTO `transaction_table` VALUES (100, 'tom');
+
+SAVEPOINT b;
+
+INSERT INTO `transaction_table` VALUES (200, 'jack');
+
+# 5、回退到b
+ROLLBACK TO b;
+# 也可以继续回退到a, 如果不带任何的保存点则回退到事务开始时的状态
+ROLLBACK TO a;
+ROLLBACK;
+
+# 结束事务
+COMMIT;
+
+SELECT * FROM `transaction_table`;
+
+# 查看当前的会话隔离级别
+SELECT @@transaction_isolation;
+
+# 查看系统给当前的隔离级别
+SELECT @@global.transaction_isolation;
+
+# 设置会话的隔离级别为 READ UNCOMMITED 读未提交
+SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
