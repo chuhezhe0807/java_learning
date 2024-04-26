@@ -800,3 +800,9 @@ SELECT @@global.transaction_isolation;
 
 # 设置会话的隔离级别为 READ UNCOMMITED 读未提交
 SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+# 查看存储引擎
+SHOW engines;
+
+# 修改表的存储引擎
+ALTER TABLE `transaction_table` ENGINE = INNODB;
