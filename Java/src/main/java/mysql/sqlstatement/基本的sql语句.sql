@@ -839,3 +839,40 @@ FROM (
 WHERE `emp_dept_temp`.`empno` = `emp_sal_grade_temp`.`empno`;
 
 SELECT * FROM `test_view01`;
+
+# mysql用户管理
+# 查看mysql 用户表
+SELECT * FROM mysql.USER;
+
+# 创建用户
+CREATE USER 'xiaozhang'@'localhost' identified BY 'xiaozhang';
+
+# 查询出来的密码(authentication_string) 是加密过后的
+SELECT `user`, `host`, `authentication_string` FROM mysql.USER;
+
+# 修改自己（当前登录的用户）的密码
+SET password = password('密码');
+
+# 修改其他人的密码（需要有修改用户密码的权限）
+# SET password FOR '用户名'@'登陆位置' = password('密码');
+
+CREATE DATABASE `testdb`;
+
+# 赋予 xiaozhang 用户 create、select、delete、update、alter、drop权限
+GRANT CREATE, INSERT, SELECT, DELETE, UPDATE, ALTER, DROP ON testdb.*
+    TO 'xiaozhang'@'localhost';
+
+# 如果权限没有生效，使用下面的语句
+flush PRIVILEGES;
+
+# 设置reload权限
+GRANT reload ON *.* TO 'xiaozhang'@'localhost';
+
+# 设置用户的密码
+SET password FOR 'xiaozhang'@'localhost' = password('1122');
+
+# 回收用户xiaozhang在 testdb.news 的所有权限
+REVOKE ALL ON testdb.* FROM 'xiaozhang'@'localhost';
+
+# 删除用户xiaozhang
+DROP USER 'xiaozhang'@'localhost';
