@@ -806,3 +806,36 @@ SHOW engines;
 
 # 修改表的存储引擎
 ALTER TABLE `transaction_table` ENGINE = INNODB;
+
+# 视图
+# 创建一个视图 employee_view01 只能查询employee表的(empno、ename, job 和 deptno信息)
+CREATE VIEW `employee_view01`
+AS SELECT `empno`, `ename`, `job`, `deptno`
+   FROM `employee`;
+
+SHOW CREATE VIEW `employee_view01`;
+
+SELECT `ename`, `job` FROM `employee_view01` WHERE `empno` = 7788;
+
+# 删除视图
+DROP VIEW `employee_view01`;
+
+# 针对employee,dept和salary_grade三张表创建一个视图，可以显示雇员编号，雇员名，
+# 雇员部门名称和薪水级别
+CREATE VIEW `test_view01` AS
+SELECT `emp_dept_temp`.`empno`, `emp_dept_temp`.`ename`,
+       `emp_dept_temp`.`dname`, `emp_sal_grade_temp`.`grade`
+FROM (
+         SELECT `employee`.`empno`, `employee`.`ename`, `dept`.`dname`
+         FROM `employee`, `dept`
+         WHERE `employee`.`deptno` = `dept`.`deptno`
+     ) `emp_dept_temp`,
+     (
+         SELECT `employee`.`empno`, `salary_grade`.`grade`
+         FROM `employee`, `salary_grade`
+         WHERE `employee`.`sal`
+                   BETWEEN `salary_grade`.`low_salary` AND `salary_grade`.`high_salary`
+     ) `emp_sal_grade_temp`
+WHERE `emp_dept_temp`.`empno` = `emp_sal_grade_temp`.`empno`;
+
+SELECT * FROM `test_view01`;
