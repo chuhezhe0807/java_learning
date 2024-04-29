@@ -876,3 +876,176 @@ REVOKE ALL ON testdb.* FROM 'xiaozhang'@'localhost';
 
 # 删除用户xiaozhang
 DROP USER 'xiaozhang'@'localhost';
+
+# sql练习
+# 写出查看 dept 表 和 employee 表结构的语句
+DESC dept;
+DESC employee;
+
+# 显示所有部门的名称
+SELECT `deptno`, `dname` FROM `dept`;
+
+# 显示所有雇员名称及其全年收入（工资+补助）
+SELECT ename, (sal * 12 + if(comm, comm, 0)) AS '年收入' FROM `employee`;
+
+# 显示工资超过2850的雇员姓名和工资
+SELECT ename, sal FROM `employee`
+WHERE sal > 2850;
+
+# 显示工资不在2500到2850之间的所有雇员名及工资
+SELECT ename, sal FROM `employee`
+WHERE sal NOT BETWEEN 2500 AND 2850;
+
+# 显示部门10和30中工资超过1500的雇员名及工资
+SELECT ename, sal, deptno FROM `employee`
+WHERE deptno IN (10, 30) AND sal > 1500;
+
+# 显示无管理者的雇员名及其岗位
+SELECT ename, job FROM `employee` WHERE mgr IS NULL;
+
+# 显示在1991年2月1日到1991年5月1日之间雇佣的雇员名，岗位及雇佣日期，并以雇佣日期进行排序
+SELECT ename, job, hiredate
+FROM `employee`
+WHERE hiredate BETWEEN '1991-2-1' AND '1991-5-1'
+ORDER BY hiredate;
+SELECT ename, job, hiredate
+FROM `employee`
+WHERE hiredate >= '1991-2-1' AND hiredate <= '1991-5-1'
+ORDER BY hiredate;
+
+# 显示获得补助的所有雇员名，工资及补助，并以工资降序排序
+SELECT ename, sal, comm FROM `employee`
+WHERE comm IS NOT null
+ORDER BY sal DESC;
+
+# 查询部门30中的所有员工
+SELECT * FROM `employee` WHERE deptno = 30;
+
+# 查询所有 clerk 的姓名，编号和部门编号
+SELECT ename, empno, deptno FROM `employee` WHERE job = 'CLERK';
+
+# 找出部门10中所有经理（MANAGER）和部门20中所有的办事员
+SELECT * FROM `employee`
+WHERE (deptno = 10 AND job = 'MANAGER') OR (deptno = 20 AND job = 'CLERK');
+
+# 找出部门10中所有经理（MANAGER）和部门20中所有的办事员，还有既不是经理又不是办事员但其
+# 薪金大于或等于2000的所有员工的详细资料
+SELECT * FROM `employee`
+WHERE (deptno = 10 AND job = 'MANAGER') OR
+    (deptno = 20 AND job = 'CLERK') OR
+    (job NOT IN ('MANAGER', 'CLERK') AND sal >= 2000);
+
+# 找出每个月倒数第三天受雇的所有员工
+SELECT * FROM `employee`
+WHERE datediff(last_day(hiredate), hiredate) = 2;
+SELECT * FROM `employee`
+WHERE month(date_add(hiredate, INTERVAL 4 DAY)) = month(hiredate) + 1;
+
+# 找出1991-7-1以前受雇的员工
+SELECT * FROM `employee`
+WHERE datediff(now(), hiredate) > datediff(now(), '1991-07-01');
+
+# 以首字母小写的方式显示所有员工的姓名
+SELECT concat(lcase(substring(ename, 1, 1)), substring(ename, 2))
+FROM `employee`;
+
+# 显示正好为5个字符的员工的姓名
+SELECT ename FROM `employee` WHERE length(ename) = 5;
+
+# 写出不带有‘R’的员工的姓名
+SELECT instr('xiaoz', 'x') FROM DUAL;
+SELECT ename FROM `employee` WHERE instr(ename, 'R') = 0;
+SELECT ename FROM `employee` WHERE ename NOT LIKE '%R%';
+
+# 显示所有员工姓名的前三个字符
+SELECT substring(ename, 1, 3) FROM `employee`;
+SELECT left(ename, 3) FROM `employee`;
+
+# 显示所有员工的姓名，用a替换所有的'A'
+SELECT REPLACE(ename, 'A', 'a') FROM `employee`;
+
+# 显示满10年服务年限的员工的姓名和受雇日期，按入职时间倒序排序
+SELECT ename, hiredate FROM `employee`
+WHERE date_add(hiredate, INTERVAL 10 year) < now()
+ORDER BY hiredate;
+
+# 显示所有员工的姓名、工作和薪金，按工作降序排序，如工作相同则按薪金排序，
+SELECT ename, job, sal
+FROM `employee`
+ORDER BY job, sal;
+
+# 显示所有员工的姓名，入职时间的年份和月份，按受雇日期所在月份排序，若月份相同则最早年份排在前面
+SELECT ename, hiredate
+FROM `employee`
+ORDER BY month(hiredate), year(hiredate);
+
+# 现在一个月为30天的情况所有的员工的日薪金，忽略余数 round() 函数为四舍五入
+SELECT ename, floor(sal / 30) FROM `employee`;
+
+# 找出（任何年份）在2月份受聘的所有员工
+SELECT ename, hiredate
+FROM `employee`
+WHERE month(hiredate) = 2;
+
+# 对于每一个员工显示其加入公司的天数
+SELECT ename, hiredate, datediff(now(), hiredate)
+FROM `employee`;
+
+# 显示姓名字段的任何位置包含‘A’的所有员工的姓名
+SELECT ename FROM `employee` WHERE instr(ename, 'A') > 0;
+
+# 以年月日的方式显示所有员工的服务年限
+SELECT datediff(now(), '2024-01-11') FROM DUAL;
+SELECT ename, floor(datediff(now(), hiredate) / 365) AS '工作年',
+       floor((datediff(now(), hiredate) / 365) % 31) AS '工作月',
+       floor(datediff(now(), hiredate) % 31) AS '工作天'
+FROM `employee`;
+
+# 列出至少有一个员工的所有部门
+SELECT DISTINCT dept.dname, dept.deptno
+FROM `dept`
+         LEFT JOIN `employee` ON dept.deptno = employee.deptno
+WHERE employee.empno IS NOT NULL;
+
+# 列出薪金比 ‘SMITH’ 多的所有员工
+SELECT ename, sal
+FROM `employee`
+WHERE sal > (
+    SELECT max(sal) FROM `employee` WHERE ename = 'SMITH'
+);
+
+# 列出受雇日期晚于其直接上级的所有员工
+SELECT emp1.ename, emp1.hiredate, emp2.hiredate
+FROM `employee` `emp1`, `employee` `emp2`
+WHERE emp1.mgr IS NOT NULL AND
+        emp1.mgr = emp2.empno AND
+        emp1.hiredate < emp2.hiredate;
+
+# 列出部门名称和这些部门的员工信息，同时列出那些没有员工的部门
+SELECT dept.deptno, dept.dname, employee.empno, employee.ename
+FROM `dept` LEFT JOIN `employee`
+                      ON dept.deptno = employee.deptno
+ORDER BY dept.deptno;
+
+# 列出所有 ‘CLERK’ 的姓名及其部门名称
+SELECT employee.ename, employee.job, dept.dname
+FROM `employee`, `dept`
+WHERE employee.deptno = dept.deptno AND
+        employee.job = 'CLERK';
+
+# 列出最低薪资大于1500的各种工作
+SELECT job, min(sal) FROM `employee`
+GROUP BY job
+HAVING min(sal) > 1500;
+
+# 列出在 ‘SALES’ 工作的员工的姓名
+SELECT employee.ename, dept.dname
+FROM `employee`, `dept`
+WHERE employee.deptno = dept.deptno AND dept.dname = 'SALES';
+
+# 列出薪金高于公司平均薪金的所有员工
+SELECT ename, sal
+FROM `employee`
+WHERE sal > (
+    SELECT avg(sal) FROM `employee`
+);
