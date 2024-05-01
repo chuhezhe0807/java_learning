@@ -1006,6 +1006,10 @@ SELECT DISTINCT dept.dname, dept.deptno
 FROM `dept`
          LEFT JOIN `employee` ON dept.deptno = employee.deptno
 WHERE employee.empno IS NOT NULL;
+SELECT deptno, count(*) AS 'emp_count'
+    FROM `employee`
+    GROUP BY deptno
+    HAVING `emp_count` > 0;
 
 # 列出薪金比 ‘SMITH’ 多的所有员工
 SELECT ename, sal
@@ -1015,6 +1019,7 @@ WHERE sal > (
 );
 
 # 列出受雇日期晚于其直接上级的所有员工
+# 可以不判断 emp1.mgr IS NOT NULL，因为如果emp1.mgr为null，emp1.mgr = emp2.empno就不会通过
 SELECT emp1.ename, emp1.hiredate, emp2.hiredate
 FROM `employee` `emp1`, `employee` `emp2`
 WHERE emp1.mgr IS NOT NULL AND
@@ -1049,3 +1054,47 @@ FROM `employee`
 WHERE sal > (
     SELECT avg(sal) FROM `employee`
 );
+
+# 列出与 ’SCOTT‘ 从事相同工作的所有员工
+SELECT * FROM `employee`
+WHERE job = (
+    SELECT job FROM `employee` WHERE ename = 'SCOTT'
+);
+
+# 列出薪金高于在部门30工作的所有员工的薪金的员工姓名和薪金
+SELECT ename, sal
+FROM `employee`
+WHERE sal > (
+    SELECT max(sal) FROM `employee` WHERE deptno = 30
+);
+
+# 列出在每个部门工作的员工数量、平均工资和平均服务期限
+SELECT deptno, count(*), avg(sal), avg(datediff(now(), hiredate)) / 365
+FROM `employee`
+GROUP BY deptno;
+
+# 列出所有员工的姓名、部门名称和工资
+SELECT employee.ename, employee.sal, dept.dname
+FROM `employee`, `dept`
+WHERE employee.deptno = dept.deptno;
+
+# 列出各种工作的最低工资
+SELECT job, min(sal) FROM `employee`
+GROUP BY job;
+
+# 列出manager的最低薪金
+SELECT min(sal) FROM `employee` WHERE job = 'MANAGER';
+
+# 列出所有员工的年工资，按照年薪从低到高排序
+SELECT ename, (sal * 12 + ifnull(comm, 0)) AS 'annual_salary'
+FROM `employee`
+ORDER BY annual_salary;
+
+# 列出所有部门的详细信息和部门人数
+SELECT dept.*, emp1.emp_count
+FROM `dept`, (
+    SELECT count(*) AS 'emp_count', deptno
+    FROM `employee`
+    GROUP BY deptno
+) emp1
+WHERE dept.deptno = emp1.deptno;
