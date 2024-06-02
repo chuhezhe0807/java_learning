@@ -18,6 +18,11 @@ import java.util.List;
  * ClassName: PhantomReferenceTest
  * Package: thread.hellovolatile
  * Description:
+ *      虚引用不决定对象的生命周期，如果一个对象仅持有虚引用，那么他就和没有任何引用一样，在任何时候都可能被垃圾回收器回收
+ *      虚引用主要用来跟踪对被垃圾回收器会后的活动。
+ *
+ *      虚引用和软引用和弱引用的一个区别在于：虚引用必须和引用队列(ReferenceQueue)联合使用，当垃圾回收器准备回收一个对象时，
+ *      如果发现她还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的队列中。
  *
  * @Author Chuhezhe
  * @Create 2023/10/31 22:48
