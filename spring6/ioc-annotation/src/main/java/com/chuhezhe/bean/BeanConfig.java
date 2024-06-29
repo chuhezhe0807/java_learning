@@ -32,10 +32,13 @@ import org.springframework.stereotype.Repository;
                 @ComponentScan.Filter(type = FilterType.CUSTOM, classes = MyTypeFilter.class) // 使用自定义规则
         }
 )
+//@Import(ClassToBeImport.class)
+@Import(MyImportSelector.class)
 public class BeanConfig {
     // @Lazy 在单例模式中，IOC容器创建的时候不会马上去调用方法创建对象并注册，只有当组件第一次被使用的时候才会调用方法创建对象并加入到容器中
     @Lazy
     @Bean
+    @Conditional(MyCondition.class)
     public User user() {
         System.out.println("向容器中添加Bean");
         return new User("xiaozhang", 26);

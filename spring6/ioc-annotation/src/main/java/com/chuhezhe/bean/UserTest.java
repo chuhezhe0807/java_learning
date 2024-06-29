@@ -44,4 +44,13 @@ public class UserTest {
 
         System.out.println(user);
     }
+
+    // 测试 @Import 注解，通过此方式添加的组件，id为全类名
+    @Test
+    public void test03() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BeanConfig.class);
+        String[] names = context.getBeanDefinitionNames();
+
+        Arrays.stream(names).forEach(System.out::println); // 包含 com.chuhezhe.bean.ClassToBeImport
+    }
 }
