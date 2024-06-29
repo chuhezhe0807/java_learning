@@ -17,6 +17,7 @@
         <module name="tiny-ioc" />
         <module name="jdbc-tx" />
         <module name="i18n" />
+        <module name="bean" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

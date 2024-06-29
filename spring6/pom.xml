@@ -20,6 +20,7 @@
         <module>resource</module>
         <module>i18n</module>
         <module>validator</module>
+        <module>bean</module>
     </modules>
 
     <artifactId>spring6</artifactId>
