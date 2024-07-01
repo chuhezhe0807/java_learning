@@ -21,6 +21,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="application" target="17" />
       <module name="basic-business" target="17" />
       <module name="fileupload" target="1.8" />
       <module name="jdk8-17_features" target="17" />

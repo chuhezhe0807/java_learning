@@ -1,0 +1,7 @@
+# Auto configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.chuhezhe.configuration.HelloWorldAutoConfiguration
+
+# Initializers
+org.springframework.context.ApplicationContextInitializer=\
+  com.chuhezhe.Initializer.AfterHelloApplicationContextInitializer,\
+  com.chuhezhe.Initializer.HelloApplicationContextInitializer
