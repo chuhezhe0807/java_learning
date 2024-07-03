@@ -10,31 +10,32 @@
         <module name="Java" />
         <module name="ioc-annotation" />
         <module name="junit" />
+        <module name="web-application" />
         <module name="aop" />
+        <module name="application" />
         <module name="resource" />
         <module name="ioc-xml" />
         <module name="validator" />
         <module name="tiny-ioc" />
         <module name="jdbc-tx" />
         <module name="i18n" />
-        <module name="bean" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="application" target="17" />
-      <module name="basic-business" target="17" />
-      <module name="fileupload" target="1.8" />
-      <module name="jdk8-17_features" target="17" />
-      <module name="little-ioc-copy" target="17" />
-      <module name="spring" target="17" />
-      <module name="spring-ioc-annotation" target="17" />
-      <module name="spring-ioc-xml" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="fileupload" options="-parameters" />
-      <module name="spring-ioc-annotation" options="" />
+      <module name="Java" options="" />
+      <module name="aop" options="" />
+      <module name="application" options="" />
+      <module name="i18n" options="" />
+      <module name="ioc-annotation" options="" />
+      <module name="ioc-xml" options="" />
+      <module name="jdbc-tx" options="" />
+      <module name="junit" options="" />
+      <module name="resource" options="" />
+      <module name="tiny-ioc" options="" />
+      <module name="validator" options="" />
+      <module name="web-application" options="-parameters" />
     </option>
   </component>
 </project>
