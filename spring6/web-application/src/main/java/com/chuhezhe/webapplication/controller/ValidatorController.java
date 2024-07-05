@@ -3,10 +3,7 @@ package com.chuhezhe.webapplication.controller;
 import com.chuhezhe.webapplication.entity.User;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,6 +33,24 @@ public class ValidatorController {
 
     @PostMapping("test2") // @RequestBody 主要用来接收前端传递给后端的json字符串中的数据的（请求体中的数据）
     public String test2(@Valid @RequestBody User user) {
+        return "success";
+    }
+
+    // 分组校验 保存
+    @PostMapping("test3")
+    public String test3(@Validated(User.Save.class) @RequestBody User user) {
+        return "success";
+    }
+
+    // 分组校验 更新
+    @PostMapping("test4")
+    public String test4(@Validated(User.Update.class) @RequestBody User user) {
+        return "success";
+    }
+
+    // 嵌套校验
+    @PostMapping("test5")
+    public String test5(@Validated @RequestBody User user) {
         return "success";
     }
 }

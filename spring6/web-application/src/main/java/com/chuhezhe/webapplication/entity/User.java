@@ -1,5 +1,6 @@
 package com.chuhezhe.webapplication.entity;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -15,15 +16,27 @@ import java.util.Objects;
  * @Version 1.0
  */
 public class User {
-    @NotNull
+    @NotNull(groups = Save.class)
     private Long userId;
 
-    @NotNull
-    @Length(min = 3, max = 5)
+    @NotNull(groups = {Save.class, Update.class})
+    @Length(min = 3, max = 5, groups = {Save.class, Update.class})
     private String userName;
 
-    @NotNull
+    @NotNull(groups = Update.class)
     private String account;
+
+    @NotNull
+    @Valid
+    private Job job;
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
     public Long getUserId() {
         return userId;
@@ -47,6 +60,28 @@ public class User {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public interface Save {
+
+    }
+
+    public interface Update {
+
+    }
+
+    public static class Job {
+        @NotNull
+        @Length(min = 1, max = 3)
+        private String jobName;
+
+        public String getJobName() {
+            return jobName;
+        }
+
+        public void setJobName(String jobName) {
+            this.jobName = jobName;
+        }
     }
 
     @Override
