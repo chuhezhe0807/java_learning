@@ -1,6 +1,9 @@
 package com.chuhezhe.webapplication.controller;
 
 import com.chuhezhe.webapplication.entity.User;
+import com.chuhezhe.webapplication.validator.annotation.EncryptPwd;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,16 @@ import javax.validation.Valid;
  * ClassName: ValidatorController
  * Package: com.chuhezhe.webapplication.controller
  * Description:
+ *    注解 @Valid 和 @Validated 的区别
+ *    区别                  @Valid                  @Validated
+ *    提供者               JSR-303规范              Spring
+ *    是否支持分组          不支持                    支持
+ *    是否支持嵌套校验       支持                     不支持
+ *    标注位置             METHOD,FIELD,            TYPE,METHOD,PARAMETER
+ *                      CONSTRUCTOR,PARAMETER,
+ *                      TYPE
+ *
+ *    注意使用校验时尽可能使用 jakarta.validation 包下的，防止不能生效
  *
  * @Author Chuhezhe
  * @Create 2024/7/1 22:34
@@ -27,7 +40,7 @@ public class ValidatorController {
      * 要使以上注解生效，还需要在类上加上 @Validated 注解
      */
     @GetMapping("test1")
-    public String test1(@Length(min = 3, max = 5, message = "自定义 message，参数长度需要在3到5之间") String name) {
+    public String test1(@NotNull @Length(min = 3, max = 5, message = "自定义 message，参数长度需要在3到5之间") String name) {
         return "success";
     }
 
@@ -52,5 +65,11 @@ public class ValidatorController {
     @PostMapping("test5")
     public String test5(@Validated @RequestBody User user) {
         return "success";
+    }
+
+    // 自定义校验 由数字或者a-f的字母组成，1-5长度
+    @GetMapping("test6")
+    public String test6(@NotBlank @EncryptPwd(message = "自定义校验 由数字或者a-f的字母组成，1-5长度") String pwd) {
+        return "test6 success";
     }
 }
