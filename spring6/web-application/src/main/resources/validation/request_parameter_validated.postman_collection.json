@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "28ab594b-f9db-400b-bdb1-7232b99d53d9",
+		"name": "spring_app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "@Validated",
+			"item": [
+				{
+					"name": "简单参数校验",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/test1?name=\"zzz\"",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"test1"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "\"zzz\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "实体参数校验",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"1\",\r\n    \"account\": \"\",\r\n    \"userName\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/test2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"test2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "分组校验(保存 userId)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"1111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/test3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"test3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "分组校验(更新 account)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/test4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"test4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "嵌套校验(job)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"1\",\r\n    \"account\": \"\",\r\n    \"userName\": \"123\",\r\n    \"job\": {\r\n        \"jobName\": \"1\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/test5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"test5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "自定义校验(由数字或者a-f的字母组成，32-256长度)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/test6?pwd=z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"test6"
+							],
+							"query": [
+								{
+									"key": "pwd",
+									"value": "z"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
