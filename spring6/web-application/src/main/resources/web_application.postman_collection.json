@@ -171,6 +171,44 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "PropertiesConverter",
+			"item": [
+				{
+					"name": "test1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/properties",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "name:xiaozhang\r\nage:20"
+						},
+						"url": {
+							"raw": "http://localhost:8081/propertiesconverter/test1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"propertiesconverter",
+								"test1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
