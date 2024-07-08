@@ -176,7 +176,7 @@
 			"name": "PropertiesConverter",
 			"item": [
 				{
-					"name": "test1",
+					"name": "有@RequestBody",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -203,6 +203,39 @@
 							"path": [
 								"propertiesconverter",
 								"test1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "无@RequestBody",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/properties",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "name:xiaozhang\r\nage:20"
+						},
+						"url": {
+							"raw": "http://localhost:8081/propertiesconverter/test2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"propertiesconverter",
+								"test2"
 							]
 						}
 					},
