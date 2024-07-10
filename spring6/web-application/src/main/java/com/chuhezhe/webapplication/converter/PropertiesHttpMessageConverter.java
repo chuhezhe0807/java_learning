@@ -29,6 +29,11 @@ public class PropertiesHttpMessageConverter extends AbstractGenericHttpMessageCo
         super(new MediaType("text", "properties"));
     }
 
+    @Override
+    public boolean canWrite(Type type, Class<?> clazz, MediaType mediaType) {
+        return Properties.class.getName().equals(type.getTypeName());
+    }
+
     // 序列化过程，将响应序列化
     @Override
     protected void writeInternal(Properties properties, Type type, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {

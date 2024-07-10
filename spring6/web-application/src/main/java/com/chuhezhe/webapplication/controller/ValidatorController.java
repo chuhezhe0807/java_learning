@@ -30,6 +30,7 @@ import javax.validation.Valid;
  * @Version 1.0
  */
 @RestController // @Controller 和 @ResponseBody 的组合，@ResponseBody 将方法的返回值直接写入HTTP响应实体中，而不是将返回值解释为视图名称(HTML的名称)，然后再根据视图名称去寻找对应的视图模板
+@RequestMapping("/validator")
 @Validated
 public class ValidatorController {
 
@@ -39,36 +40,36 @@ public class ValidatorController {
      *
      * 要使以上注解生效，还需要在类上加上 @Validated 注解
      */
-    @GetMapping("test1")
+    @GetMapping("/test1")
     public String test1(@NotNull @Length(min = 3, max = 5, message = "自定义 message，参数长度需要在3到5之间") String name) {
         return "success";
     }
 
-    @PostMapping("test2") // @RequestBody 主要用来接收前端传递给后端的json字符串中的数据的（请求体中的数据）
+    @PostMapping("/test2") // @RequestBody 主要用来接收前端传递给后端的json字符串中的数据的（请求体中的数据）
     public String test2(@Valid @RequestBody User user) {
         return "success";
     }
 
     // 分组校验 保存
-    @PostMapping("test3")
+    @PostMapping("/test3")
     public String test3(@Validated(User.Save.class) @RequestBody User user) {
         return "success";
     }
 
     // 分组校验 更新
-    @PostMapping("test4")
+    @PostMapping("/test4")
     public String test4(@Validated(User.Update.class) @RequestBody User user) {
         return "success";
     }
 
     // 嵌套校验
-    @PostMapping("test5")
+    @PostMapping("/test5")
     public String test5(@Validated @RequestBody User user) {
         return "success";
     }
 
     // 自定义校验 由数字或者a-f的字母组成，1-5长度
-    @GetMapping("test6")
+    @GetMapping("/test6")
     public String test6(@NotBlank @EncryptPwd(message = "自定义校验 由数字或者a-f的字母组成，1-5长度") String pwd) {
         return "test6 success";
     }

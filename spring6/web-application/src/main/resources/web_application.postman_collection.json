@@ -14,19 +14,20 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/test1?name=\"zzz\"",
+							"raw": "http://localhost:8081/validator/test1?name=",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
+								"validator",
 								"test1"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "\"zzz\""
+									"value": ""
 								}
 							]
 						}
@@ -48,13 +49,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/test2",
+							"raw": "http://localhost:8081/validator/test2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
+								"validator",
 								"test2"
 							]
 						}
@@ -76,13 +78,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/test3",
+							"raw": "http://localhost:8081/validator/test3",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
+								"validator",
 								"test3"
 							]
 						}
@@ -104,13 +107,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/test4",
+							"raw": "http://localhost:8081/validator/test4",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
+								"validator",
 								"test4"
 							]
 						}
@@ -132,13 +136,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/test5",
+							"raw": "http://localhost:8081/validator/test5",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
+								"validator",
 								"test5"
 							]
 						}
@@ -151,13 +156,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/test6?pwd=z",
+							"raw": "http://localhost:8081/validator/test6?pwd=z",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
+								"validator",
 								"test6"
 							],
 							"query": [
