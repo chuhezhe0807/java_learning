@@ -5,6 +5,7 @@ import com.chuhezhe.webapplication.resolver.PropertiesHandlerMethodArgumentResol
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -35,5 +36,14 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(0, new PropertiesHandlerMethodArgumentResolver());
+    }
+
+    // 处理跨域
+    // 所有请求都支持跨域访问，且不限定域，但是支持GET请求
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET");
     }
 }
