@@ -4,6 +4,7 @@ import com.chuhezhe.webapplication.converter.PropertiesHttpMessageConverter;
 import com.chuhezhe.webapplication.resolver.PropertiesHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -22,6 +23,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Configuration
+@EnableAsync // 开启异步支持
 public class WebConfigurer implements WebMvcConfigurer {
 
     @Override
