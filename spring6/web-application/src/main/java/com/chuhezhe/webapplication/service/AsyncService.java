@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,10 +21,12 @@ import java.util.concurrent.TimeUnit;
 public class AsyncService {
     private final Logger logger  = LoggerFactory.getLogger(AsyncService.class);
 
-    @Async // 方法加上 @Async 注解就是异步方法了
-    public void asyncMethod() {
+    @Async("asyncThreadPoolTaskExecutor1") // 方法加上 @Async 注解就是异步方法了，指定线程池 Bean 的名称
+    public CompletableFuture<String> asyncMethod() {
         sleep(); // 由于是异步方法的原因，程序并不会被 sleep() 方法阻塞。异步方法内部会开一个线程来执行
         logger.info("异步方法内部线程名称: {}", Thread.currentThread().getName());
+
+        return CompletableFuture.completedFuture("hello async");
     }
 
     public void syncMethod() {

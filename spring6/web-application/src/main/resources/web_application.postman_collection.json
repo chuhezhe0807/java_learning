@@ -248,6 +248,51 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "@Async",
+			"item": [
+				{
+					"name": "testAsync",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/async/testAsync",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"async",
+								"testAsync"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "testSync",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/async/testSync",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"async",
+								"testSync"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
