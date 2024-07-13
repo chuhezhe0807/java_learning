@@ -7,7 +7,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * ClassName: AsyncConfig
+ * ClassName: AsyncConfigurer
  * Package: com.chuhezhe.webapplication.config
  * Description: 默认情况下的异步线程池配置不能被重用，每次调用异步方法都会新建一个线程，可以通过自定义异步线程池来优化。
  *
@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Version 1.0
  */
 @Configuration
-public class AsyncConfig {
+public class AsyncConfigurer {
 
     @Bean(name = "asyncThreadPoolTaskExecutor1")
     public ThreadPoolTaskExecutor asyncThreadPoolTaskExecutor() {
