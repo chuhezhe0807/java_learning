@@ -1,5 +1,6 @@
 package com.chuhezhe.webapplication.handler;
 
+import com.chuhezhe.webapplication.exception.UserNotExistException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -60,5 +63,15 @@ public class GlobalExceptionHandler {
         }
 
         return message.substring(0, message.length() - 1);
+    }
+
+    @ExceptionHandler(UserNotExistException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, Object> handleUserNotExistException(UserNotExistException e) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", e.getId());
+        map.put("message", e.getMessage());
+
+        return map;
     }
 }
