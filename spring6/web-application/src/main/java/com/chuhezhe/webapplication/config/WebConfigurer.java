@@ -1,7 +1,10 @@
 package com.chuhezhe.webapplication.config;
 
 import com.chuhezhe.webapplication.converter.PropertiesHttpMessageConverter;
+import com.chuhezhe.webapplication.filter.RequestTimeConsumption;
 import com.chuhezhe.webapplication.resolver.PropertiesHandlerMethodArgumentResolver;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -9,7 +12,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ClassName: WebConfigurer
@@ -25,6 +30,23 @@ import java.util.List;
 @Configuration
 @EnableAsync // 开启异步支持
 public class WebConfigurer implements WebMvcConfigurer {
+
+    // 添加检测请求耗时的自定义过滤器，多个过滤器可以向Spring容器中添加多个 FilterRegistrationBean
+    @Bean
+    public FilterRegistrationBean<RequestTimeConsumption> timeFilter() {
+        FilterRegistrationBean<RequestTimeConsumption> filterFilterRegistrationBean = new FilterRegistrationBean<>();
+
+        Set<String> urlSet = new HashSet<>();
+        urlSet.add("/*");
+
+        filterFilterRegistrationBean.setFilter(new RequestTimeConsumption()); // 检测请求耗时的过滤器
+        filterFilterRegistrationBean.setUrlPatterns(urlSet);
+        filterFilterRegistrationBean.addInitParameter(RequestTimeConsumption.INIT_PARAMETER_NAME, "/favicon.ico,/excludeURI");
+        filterFilterRegistrationBean.setName("RequestTimeConsumption");
+        filterFilterRegistrationBean.setOrder(1); // 数字越小，执行越早
+
+        return filterFilterRegistrationBean;
+    }
 
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
