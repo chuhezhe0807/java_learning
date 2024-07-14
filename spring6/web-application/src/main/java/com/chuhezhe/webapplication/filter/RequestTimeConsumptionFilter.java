@@ -20,10 +20,10 @@ import java.util.Arrays;
  */
 //@Component
 //@WebFilter(urlPatterns = "/*") // 可以通过 @WebFilter 配合 @Component 实现添加自定义过滤器，不过为保证类尽可能地保持最少知道原则，推荐在 WebConfig 中通过 FilterRegistrationBean 来注册过滤器
-public class RequestTimeConsumption implements Filter {
+public class RequestTimeConsumptionFilter implements Filter {
 
     public static final String INIT_PARAMETER_NAME = "__excludedUris__";
-    private static final Logger logger = LoggerFactory.getLogger(RequestTimeConsumption.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestTimeConsumptionFilter.class);
     private String[] excludedUris = null;
 
     @Override
@@ -45,7 +45,7 @@ public class RequestTimeConsumption implements Filter {
         logger.info("开始执行过滤器");
         long start = System.currentTimeMillis();
         chain.doFilter(request, response);
-        logger.info("【过滤器】耗时: {}", System.currentTimeMillis() - start);
+        logger.info("【过滤器】请求耗时: {}", System.currentTimeMillis() - start);
         logger.info("结束执行过滤器");
     }
 
