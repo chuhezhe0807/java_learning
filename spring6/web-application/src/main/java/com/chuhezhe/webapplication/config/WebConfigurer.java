@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -31,7 +35,40 @@ import java.util.Set;
  */
 @Configuration
 @EnableAsync // 开启异步支持
+@EnableWebSecurity // 开启 SpringSecurity，之后会注册大量的过滤器 servlet filter
 public class WebConfigurer implements WebMvcConfigurer {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // authorizeHttpRequests 针对http请求进行授权配置
+        // login 登陆页面需要匿名访问
+        // permitAll 具有所有权限，也就是可以匿名访问
+        // anyRequest 任何请求
+        // authenticated 认证(登录)
+        http.authorizeHttpRequests(authorizeHttpRequests ->
+                authorizeHttpRequests
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().authenticated()
+        );
+
+        // loginPage 登录页面
+        // loginProcessingUrl 登录接口 过滤器
+        // defaultSuccessfulUrl 登录成功之后访问的页面
+        http.formLogin(formLogin ->
+                formLogin
+                        .loginPage("/login").permitAll()
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/index")
+        );
+
+        // 关闭跨域漏洞防御
+        http.csrf(Customizer.withDefaults());
+
+        // 退出
+        http.logout(logout -> logout.invalidateHttpSession(true));
+
+        return http.build();
+    }
 
     // 添加检测请求耗时的自定义过滤器，多个过滤器可以向Spring容器中添加多个 FilterRegistrationBean
     @Bean
