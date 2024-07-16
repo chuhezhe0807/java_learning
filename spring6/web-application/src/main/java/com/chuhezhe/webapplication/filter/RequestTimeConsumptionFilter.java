@@ -1,7 +1,7 @@
 package com.chuhezhe.webapplication.filter;
 
 import jakarta.servlet.*;
-import org.apache.catalina.connector.RequestFacade;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -38,7 +38,7 @@ public class RequestTimeConsumptionFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if(excludedUris != null && Arrays.stream(excludedUris).anyMatch(uri -> uri.equals(((RequestFacade) request).getRequestURI()))) {
+        if(excludedUris != null && Arrays.stream(excludedUris).anyMatch(uri -> uri.equals(((HttpServletRequest) request).getRequestURI()))) {
             return;
         }
 
