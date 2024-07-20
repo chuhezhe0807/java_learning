@@ -58,8 +58,11 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         // 模拟生成用户，实际开发时会从数据库读取数据
-        UserDetails user1 = User.withUsername("admin").password("123").roles("admin", "user").build();
-        UserDetails user2 = User.withUsername("user").password("123").roles("user").build();
+//        UserDetails user1 = User.withUsername("admin").password("123").roles("admin", "user").build();
+//        UserDetails user2 = User.withUsername("user").password("123").roles("user").build();
+
+        UserDetails user1 = User.withUsername("admin").password("123").authorities("admin:api", "user:api").build();
+        UserDetails user2 = User.withUsername("user").password("123").authorities("user:api").build();
 
         return new InMemoryUserDetailsManager(user1, user2);
     }
@@ -73,8 +76,20 @@ public class WebConfigurer implements WebMvcConfigurer {
         // authenticated 认证(登录)
         http.authorizeHttpRequests(authorizeHttpRequests ->
                 authorizeHttpRequests
-                        .requestMatchers("/auth/admin/api").hasRole("admin") // 只有 admin 角色才可以访问
-                        .requestMatchers("/auth/user/api").hasAnyRole("admin", "user") // 含有 user 角色就可以访问
+                        // 角色
+//                        .requestMatchers("/auth/admin/api").hasRole("admin") // 只有 admin 角色才可以访问
+//                        .requestMatchers("/auth/user/api").hasAnyRole("admin", "user") // 含有 user 角色就可以访问
+
+                        // 权限
+                        .requestMatchers("/auth/admin/api").hasAuthority("admin:api") // 必须有 admin:api权限 才可以访问到
+                        .requestMatchers("/auth/user/api").hasAnyAuthority("admin:api", "user:api") // 含有 "admin:api", "user:api" 其中一个权限就可以
+
+                        // 匹配模式
+                        // ? 匹配任意单个字符
+                        // * 0到任意数量的字符
+                        // ** 0到任意个目录
+                        .requestMatchers("/auth/user/api/?").hasAnyAuthority("admin:api", "user:api") // 含有 "admin:api", "user:api" 其中一个权限就可以
+
                         .requestMatchers("/auth/app/api").permitAll() // 任何角色都可以访问(匿名可以访问)
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated()

@@ -6,11 +6,13 @@
 </head>
 <body>
 <h1>首页</h1>
-<br />
 
 <a th:href="@{/auth/admin/api}">auth/admin/api</a><br />
 <a th:href="@{/auth/user/api}">auth/user/api</a><br />
+<a th:href="@{/auth/user/api/a}">auth/user/api/a</a><br />
 <a th:href="@{/auth/app/api}">auth/app/api</a><br />
+
+<br />
 
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="退出">

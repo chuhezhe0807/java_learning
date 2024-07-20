@@ -3,6 +3,7 @@ package com.chuhezhe.webapplication.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * ClassName: AuthorizationController
@@ -25,6 +26,12 @@ public class AuthorizationController {
     @GetMapping ("/user/api")
     public String user() {
         return "auth/user";
+    }
+
+    @GetMapping ("/user/api/a")
+    @ResponseBody
+    public String userSubs() {
+        return "auth/user/a";
     }
 
     @GetMapping ("/app/api")
