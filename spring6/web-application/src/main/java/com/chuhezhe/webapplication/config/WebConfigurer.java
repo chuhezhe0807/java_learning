@@ -4,7 +4,6 @@ import com.chuhezhe.webapplication.converter.PropertiesHttpMessageConverter;
 import com.chuhezhe.webapplication.filter.RequestTimeConsumptionFilter;
 import com.chuhezhe.webapplication.interceptor.RequestTimeConsumptionInterceptor;
 import com.chuhezhe.webapplication.resolver.PropertiesHandlerMethodArgumentResolver;
-import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -15,20 +14,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.sql.DataSource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,39 +44,12 @@ public class WebConfigurer implements WebMvcConfigurer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebConfigurer.class);
 
-    @Resource
-    private DataSource dataSource;
-
     /**
      * 加密编码，开发环境一般明文加密，生产环境一般密文加密
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
-        manager.setDataSource(dataSource);
-
-        // 模拟生成用户，实际开发时会从数据库读取数据
-        UserDetails user1 = User.withUsername("admin").password("123").roles("admin", "user").build();
-        UserDetails user2 = User.withUsername("user").password("123").roles("user").build();
-
-//        UserDetails user1 = User.withUsername("admin").password("123").authorities("admin:api", "user:api").build();
-//        UserDetails user2 = User.withUsername("user").password("123").authorities("user:api").build();
-
-        // 在表里面创建用户信息
-        if(!manager.userExists("admin")) {
-            manager.createUser(user1);
-        }
-
-        if(!manager.userExists("user")) {
-            manager.createUser(user2);
-        }
-
-        return manager;
     }
 
     @Bean
@@ -96,18 +62,18 @@ public class WebConfigurer implements WebMvcConfigurer {
         http.authorizeHttpRequests(authorizeHttpRequests ->
                 authorizeHttpRequests
                         // 角色
-                        .requestMatchers("/auth/admin/api").hasRole("admin") // 只有 admin 角色才可以访问
-                        .requestMatchers("/auth/user/api").hasAnyRole("admin", "user") // 含有 user 角色就可以访问
+//                        .requestMatchers("/auth/admin/api").hasRole("admin") // 只有 admin 角色才可以访问
+//                        .requestMatchers("/auth/user/api").hasAnyRole("admin", "user") // 含有 user 角色就可以访问
 
                         // 权限
-//                        .requestMatchers("/auth/admin/api").hasAuthority("admin:api") // 必须有 admin:api权限 才可以访问到
-//                        .requestMatchers("/auth/user/api").hasAnyAuthority("admin:api", "user:api") // 含有 "admin:api", "user:api" 其中一个权限就可以
+                        .requestMatchers("/auth/admin/api").hasAuthority("admin:api") // 必须有 admin:api权限 才可以访问到
+                        .requestMatchers("/auth/user/api").hasAnyAuthority("admin:api", "user:api") // 含有 "admin:api", "user:api" 其中一个权限就可以
 
                         // 匹配模式
                         // ? 匹配任意单个字符
                         // * 0到任意数量的字符
                         // ** 0到任意个目录
-                        .requestMatchers("/auth/user/api/?").hasAnyAuthority("admin:api", "user:api") // 含有 "admin:api", "user:api" 其中一个权限就可以
+//                        .requestMatchers("/auth/user/api/?").hasAnyAuthority("admin:api", "user:api") // 含有 "admin:api", "user:api" 其中一个权限就可以
 
                         .requestMatchers("/auth/app/api").permitAll() // 任何角色都可以访问(匿名可以访问)
                         .requestMatchers("/login").permitAll()
