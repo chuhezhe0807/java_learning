@@ -4,6 +4,8 @@ import com.chuhezhe.webapplication.converter.PropertiesHttpMessageConverter;
 import com.chuhezhe.webapplication.filter.RequestTimeConsumptionFilter;
 import com.chuhezhe.webapplication.interceptor.RequestTimeConsumptionInterceptor;
 import com.chuhezhe.webapplication.resolver.PropertiesHandlerMethodArgumentResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -38,15 +45,37 @@ import java.util.Set;
 @EnableWebSecurity // 开启 SpringSecurity，之后会注册大量的过滤器 servlet filter
 public class WebConfigurer implements WebMvcConfigurer {
 
+    private static final Logger logger = LoggerFactory.getLogger(WebConfigurer.class);
+
+    /**
+     * 加密编码，开发环境一般明文加密，生产环境一般密文加密
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+        // 模拟生成用户，实际开发时会从数据库读取数据
+        UserDetails user1 = User.withUsername("admin").password("123").roles("admin", "user").build();
+        UserDetails user2 = User.withUsername("user").password("123").roles("user").build();
+
+        return new InMemoryUserDetailsManager(user1, user2);
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // authorizeHttpRequests 针对http请求进行授权配置
-        // login 登陆页面需要匿名访问
+        // login 登陆接口需要匿名访问
         // permitAll 具有所有权限，也就是可以匿名访问
         // anyRequest 任何请求
         // authenticated 认证(登录)
         http.authorizeHttpRequests(authorizeHttpRequests ->
                 authorizeHttpRequests
+                        .requestMatchers("/auth/admin/api").hasRole("admin") // 只有 admin 角色才可以访问
+                        .requestMatchers("/auth/user/api").hasAnyRole("admin", "user") // 含有 user 角色就可以访问
+                        .requestMatchers("/auth/app/api").permitAll() // 任何角色都可以访问(匿名可以访问)
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated()
         );
@@ -54,6 +83,8 @@ public class WebConfigurer implements WebMvcConfigurer {
         // loginPage 登录页面
         // loginProcessingUrl 登录接口 过滤器
         // defaultSuccessfulUrl 登录成功之后访问的页面
+        // successHandler 登录成功的处理器
+        // failureHandler 登录失败的处理器
         http.formLogin(formLogin ->
                 formLogin
                         .loginPage("/login").permitAll()
@@ -61,8 +92,14 @@ public class WebConfigurer implements WebMvcConfigurer {
                         .defaultSuccessUrl("/index")
         );
 
+        // TODO 应该捕获异常，根据异常类型，判断重定向到哪一个页面
+        http.exceptionHandling(e -> e.accessDeniedPage("/auth/noAuth"));
+
         // 关闭跨域漏洞防御
         http.csrf(Customizer.withDefaults());
+
+        // 跨域拦截关闭
+        http.cors(Customizer.withDefaults());
 
         // 退出
         http.logout(logout -> logout.invalidateHttpSession(true));

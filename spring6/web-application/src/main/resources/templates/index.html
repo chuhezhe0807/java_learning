@@ -6,7 +6,12 @@
 </head>
 <body>
 <h1>首页</h1>
-<div>退出是一个POST请求</div>
+<br />
+
+<a th:href="@{/auth/admin/api}">auth/admin/api</a><br />
+<a th:href="@{/auth/user/api}">auth/user/api</a><br />
+<a th:href="@{/auth/app/api}">auth/app/api</a><br />
+
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="退出">
 </form>
