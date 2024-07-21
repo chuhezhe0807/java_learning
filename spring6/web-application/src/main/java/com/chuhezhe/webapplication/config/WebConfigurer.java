@@ -2,6 +2,7 @@ package com.chuhezhe.webapplication.config;
 
 import com.chuhezhe.webapplication.converter.PropertiesHttpMessageConverter;
 import com.chuhezhe.webapplication.filter.RequestTimeConsumptionFilter;
+import com.chuhezhe.webapplication.handler.LoginFailureHandler;
 import com.chuhezhe.webapplication.interceptor.RequestTimeConsumptionInterceptor;
 import com.chuhezhe.webapplication.resolver.PropertiesHandlerMethodArgumentResolver;
 import org.slf4j.Logger;
@@ -89,6 +90,7 @@ public class WebConfigurer implements WebMvcConfigurer {
                 formLogin
                         .loginPage("/login").permitAll()
                         .loginProcessingUrl("/login")
+                        .failureHandler(new LoginFailureHandler())
                         .defaultSuccessUrl("/index")
         );
 
