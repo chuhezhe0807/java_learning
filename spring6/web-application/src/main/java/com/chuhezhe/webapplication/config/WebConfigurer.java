@@ -1,10 +1,13 @@
 package com.chuhezhe.webapplication.config;
 
 import com.chuhezhe.webapplication.converter.PropertiesHttpMessageConverter;
+import com.chuhezhe.webapplication.filter.LoginFilter;
 import com.chuhezhe.webapplication.filter.RequestTimeConsumptionFilter;
 import com.chuhezhe.webapplication.handler.LoginFailureHandler;
+import com.chuhezhe.webapplication.handler.LoginSuccessHandler;
 import com.chuhezhe.webapplication.interceptor.RequestTimeConsumptionInterceptor;
 import com.chuhezhe.webapplication.resolver.PropertiesHandlerMethodArgumentResolver;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -12,12 +15,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -44,6 +49,9 @@ import java.util.Set;
 public class WebConfigurer implements WebMvcConfigurer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebConfigurer.class);
+
+    @Resource
+    private AuthenticationConfiguration authenticationConfiguration;
 
     /**
      * 加密编码，开发环境一般明文加密，生产环境一般密文加密
@@ -91,17 +99,21 @@ public class WebConfigurer implements WebMvcConfigurer {
                         .loginPage("/login").permitAll()
                         .loginProcessingUrl("/login")
                         .failureHandler(new LoginFailureHandler())
-                        .defaultSuccessUrl("/index")
+                        .successHandler(new LoginSuccessHandler())
         );
+
+        // 配置自定义登录filter
+        // 将 UsernamePasswordAuthenticationFilter 替换掉
+        http.addFilterAt(new LoginFilter(authenticationConfiguration.getAuthenticationManager()), UsernamePasswordAuthenticationFilter.class);
 
         // TODO 应该捕获异常，根据异常类型，判断重定向到哪一个页面
         http.exceptionHandling(e -> e.accessDeniedPage("/auth/noAuth"));
 
         // 关闭跨域漏洞防御
-        http.csrf(Customizer.withDefaults());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         // 跨域拦截关闭
-        http.cors(Customizer.withDefaults());
+        http.cors(AbstractHttpConfigurer::disable);
 
         // 退出
         http.logout(logout -> logout.invalidateHttpSession(true));
