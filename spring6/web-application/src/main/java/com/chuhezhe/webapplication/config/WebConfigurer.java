@@ -85,6 +85,7 @@ public class WebConfigurer implements WebMvcConfigurer {
 //                        .requestMatchers("/auth/user/api/?").hasAnyAuthority("admin:api", "user:api") // 含有 "admin:api", "user:api" 其中一个权限就可以
 
                         .requestMatchers("/auth/app/api").permitAll() // 任何角色都可以访问(匿名可以访问)
+                        .requestMatchers("/captcha/**").permitAll() // "/captcha" 下所有目录都可以访问
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated()
         );
@@ -105,9 +106,6 @@ public class WebConfigurer implements WebMvcConfigurer {
         // 配置自定义登录filter
         // 将 UsernamePasswordAuthenticationFilter 替换掉
         http.addFilterAt(new LoginFilter(authenticationConfiguration.getAuthenticationManager()), UsernamePasswordAuthenticationFilter.class);
-
-        // TODO 应该捕获异常，根据异常类型，判断重定向到哪一个页面
-        http.exceptionHandling(e -> e.accessDeniedPage("/auth/noAuth"));
 
         // 关闭跨域漏洞防御
         http.csrf(AbstractHttpConfigurer::disable);

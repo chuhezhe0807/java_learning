@@ -38,6 +38,9 @@ public class UserDetail implements UserDetails {
     @TableField("enabled")
     private Boolean enabled;
 
+    @TableField(exist = false)
+    private String captchaCode;
+
     // 权限标识，例如 admin:api, user:api 等... 有admin权限，user权限等
     @TableField(exist = false)
     private List<GrantedAuthority> authorities;
@@ -72,6 +75,14 @@ public class UserDetail implements UserDetails {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getCaptchaCode() {
+        return captchaCode;
+    }
+
+    public void setCaptchaCode(String captchaCode) {
+        this.captchaCode = captchaCode;
     }
 
     public List<GrantedAuthority> getAuthorities() {

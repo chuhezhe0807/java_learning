@@ -28,7 +28,7 @@ public class RequestTimeConsumptionFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        logger.info("过滤器初始化");
+//        logger.info("过滤器初始化");
         String excludedUris = filterConfig.getInitParameter(INIT_PARAMETER_NAME);
 
         if(StringUtils.hasLength(excludedUris)) {
@@ -42,11 +42,11 @@ public class RequestTimeConsumptionFilter implements Filter {
             return;
         }
 
-        logger.info("开始执行过滤器");
-        long start = System.currentTimeMillis();
+//        logger.info("开始执行过滤器");
+//        long start = System.currentTimeMillis();
         chain.doFilter(request, response);
-        logger.info("【过滤器】请求耗时: {}", System.currentTimeMillis() - start);
-        logger.info("结束执行过滤器");
+//        logger.info("【过滤器】请求耗时: {}", System.currentTimeMillis() - start);
+//        logger.info("结束执行过滤器");
     }
 
     @Override

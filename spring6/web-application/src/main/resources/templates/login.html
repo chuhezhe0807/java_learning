@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <title>登录页面</title>
 </head>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <body>
 <h1>欢迎登录</h1>
-<form th:action="@{/login}" method="post">
-    用户名：<input type="text" name="username" /><br />
-    密码：<input type="text" name="password" /><br />
-    <input type="submit" value="登录" />
-</form>
+<div>
+    用户名：<input id="username" type="text" name="username" value="admin" /><br />
+    密码：<input id="password" type="text" name="password" value="123" /><br />
+    验证码: <input id="captcha" type="text" name="captcha"><br />
+    <img src="/captcha/pic.jpg" />
+    <button onclick="login()">登录</button>
+</div>
 </body>
+
+<script type="text/javascript">
+    function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const captcha = document.getElementById("captcha").value;
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/login",
+            contentType: "application/json",
+            data:JSON.stringify({
+                "username": username,
+                "password": password,
+                "captchaCode": captcha
+            })
+        });
+    }
+</script>
 </html>

@@ -1,0 +1,37 @@
+package com.chuhezhe.webapplication.config;
+
+import com.google.code.kaptcha.Producer;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.google.code.kaptcha.util.Config;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Properties;
+
+/**
+ * ClassName: CaptchaConfig
+ * Package: com.chuhezhe.webapplication.config
+ * Description:
+ *
+ * @Author Chuhezhe
+ * @Create 2024/7/24 23:12
+ * @Version 1.0
+ */
+@Configuration
+public class CaptchaConfig {
+
+    @Bean
+    public Producer producer() {
+        Properties properties = new Properties();
+        properties.setProperty("kaptcha.image.width", "150");
+        properties.setProperty("kaptcha.image.height", "50");
+        properties.setProperty("kaptcha.textproducer.char.string", "0123456789");
+        properties.setProperty("kaptcha.textproducer.char.length", "4");
+
+        Config config = new Config(properties);
+        DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
+        defaultKaptcha.setConfig(config);
+
+        return defaultKaptcha;
+    }
+}

@@ -6,6 +6,7 @@ import com.chuhezhe.webapplication.handler.LoginFailureHandler;
 import com.chuhezhe.webapplication.handler.LoginSuccessHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,15 +46,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
 
-        UserDetail loginParameter;
+        UserDetail loginParameter = getLoginParameter(request);
+        boolean verifiedCode = verificationCode(loginParameter, request);
 
-        try {
-            loginParameter = getLoginParameter(request);
-        }
-        catch (IOException e) {
-            logger.info(e.getMessage());
-
-            return null;
+        if(!verifiedCode) {
+            throw new AuthenticationServiceException("验证码验证失败！");
         }
 
         UsernamePasswordAuthenticationToken authRequest =
@@ -67,15 +65,41 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
      * @param request  servlet 对象
      * @return UserDetail
      */
-    private UserDetail getLoginParameter(HttpServletRequest request) throws IOException {
-        BufferedReader reader = request.getReader(); // 从请求体中获取数据
-        StringBuilder sbf = new StringBuilder();
-        String line;
+    private UserDetail getLoginParameter(HttpServletRequest request) {
+        try {
+            BufferedReader reader = request.getReader(); // 从请求体中获取数据
+            StringBuilder sbf = new StringBuilder();
+            String line;
 
-        while((line = reader.readLine()) != null) {
-            sbf.append(line);
+            while((line = reader.readLine()) != null) {
+                sbf.append(line);
+            }
+
+            return JSONUtil.parse(sbf.toString()).toBean(UserDetail.class);
+        }
+        catch (IOException e) {
+            logger.info("Login failure: {}", e.getMessage());
+
+            return null;
+        }
+    }
+
+    /**
+     * 校验验证码是否正确
+     */
+    private boolean verificationCode(UserDetail userDetail, HttpServletRequest request) {
+        if(userDetail == null) {
+            return false;
         }
 
-        return JSONUtil.parse(sbf.toString()).toBean(UserDetail.class);
+        String requestCode = userDetail.getCaptchaCode();
+        HttpSession session = request.getSession();
+        String sessionCode = (String) session.getAttribute("captcha");
+
+        if(StringUtils.hasLength(sessionCode)) {
+            session.removeAttribute("captcha");
+        }
+
+        return StringUtils.hasLength(requestCode) && StringUtils.hasLength(sessionCode) && requestCode.equals(sessionCode);
     }
 }
