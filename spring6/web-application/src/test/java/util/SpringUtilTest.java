@@ -1,7 +1,14 @@
 package util;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.FileSystemUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * ClassName: SpringUtilTest
@@ -13,6 +20,15 @@ import org.springframework.util.ClassUtils;
  * @Version 1.0
  */
 public class SpringUtilTest {
+
+    class B {
+
+    }
+
+    static class C {
+
+    }
+
     // ClassUtils.isPresent(String className, @Nullable ClassLoader classLoader) 判断当前 classLoader 是否包含目标类型
     @Test
     public void test01() {
@@ -53,5 +69,64 @@ public class SpringUtilTest {
         System.out.println(ClassUtils.isAssignable(int.class, Integer.class)); // true
         System.out.println(ClassUtils.isAssignable(RuntimeException.class, Exception.class)); // false
         System.out.println(ClassUtils.isAssignable(Exception.class, RuntimeException.class)); // true
+    }
+
+    // Class<?>[] getAllInterfaces(Object instance)  返回给定实例对象所实现的接口类型的数组
+    @Test
+    public void test06() {
+        AutowiredAnnotationBeanPostProcessor processor = new AutowiredAnnotationBeanPostProcessor();
+        Class<?>[] allInterfaces = ClassUtils.getAllInterfaces(processor);
+        Arrays.stream(allInterfaces).forEach(System.out::println);
+    }
+
+    //  isInnerClass(Class<?> clazz) 判断给定类是否是内部类(非静态)
+    @Test
+    public void test07() {
+        System.out.println(ClassUtils.isInnerClass(B.class)); // true
+        System.out.println(ClassUtils.isInnerClass(C.class)); // false
+    }
+
+    // hasConstructor(Class<?> clazz, Class<?>... paramTypes)
+    @Test
+    public void test08() {
+        System.out.println(ClassUtils.hasConstructor(String.class, String.class)); // true
+        System.out.println(ClassUtils.hasConstructor(String.class, Object.class)); // false
+    }
+
+    // hasMethod(Class<?> clazz, Method method) 给定类是否有指定的方法
+    @Test
+    public void test09() throws NoSuchMethodException {
+        Method method = ClassUtils.class.getDeclaredMethod("hasMethod", Class.class, Method.class);
+        System.out.println(ClassUtils.hasMethod(ClassUtils.class, method));
+    }
+
+    // getMethodIfAvailable(Class<?> clazz, String methodName, @Nullable Class<?>... paramTypes) 返回给定类的指定方法，如果不存在则返回null
+    @Test
+    public void test10() {
+        System.out.println(ClassUtils.getMethodIfAvailable(ClassUtils.class, "hello")); // null
+        System.out.println(ClassUtils.getMethodIfAvailable(ClassUtils.class, "hasMethod", Class.class, Method.class)); // Method
+    }
+
+    // getStaticMethod(Class<?> clazz, String methodName, Class<?>... args) 获取给定类的静态方法，如果没有该方法或者该方法不是静态的则返回null
+    @Test
+    public void test11() {
+        Method method = ClassUtils.getStaticMethod(ClassUtils.class, "getDefaultClassLoader");
+        System.out.println(method != null); // true
+        System.out.println(method.getReturnType()); // class java.lang.ClassLoader
+    }
+
+    // boolean deleteRecursively(@Nullable File root) 递归地删除指定文件或者目录，删除成功返回true，失败返回false，不会抛出异常
+    @Test
+    public void test12() {
+        File file = new File("a");
+        System.out.println(FileSystemUtils.deleteRecursively(file));
+    }
+
+    // copyRecursively(File src, File dest) 递归地赋值src文件到dest，目标路径不存在则自动创建
+    @Test
+    public void test13() throws IOException {
+        File srcFile = new File("aa");
+        File destFile = new File("bb");
+        FileSystemUtils.copyRecursively(srcFile, destFile);
     }
 }
