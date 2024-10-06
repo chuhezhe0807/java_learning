@@ -1,7 +1,4 @@
 package designed.principle.singleresponsibility;
-
-import org.aspectj.weaver.ast.Or;
-
 /**
  * ClassName: Test
  * Package: designed.principle.singleresponsibility

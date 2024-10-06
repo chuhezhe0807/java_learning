@@ -32,6 +32,7 @@
       <module name="ioc-xml" options="" />
       <module name="jdbc-tx" options="" />
       <module name="junit" options="" />
+      <module name="mybatis-source-study" options="-parameters" />
       <module name="resource" options="" />
       <module name="tiny-ioc" options="" />
       <module name="validator" options="" />
