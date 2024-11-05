@@ -347,6 +347,250 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "多条件查询",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"query\": {\r\n        \"bool\": {\r\n            \"must\": [ // 条件 且 &&\r\n                {\r\n                    \"match\": {\r\n                        \"category\": \"小米\"\r\n                    }\r\n                },\r\n                {\r\n                    \"match\": {\r\n                        \"price\": 3999.00\r\n                    }\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/shopping/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"shopping",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "多条件查询(范围)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"query\": {\r\n        \"bool\": {\r\n            \"should\": [ // 条件 或 ||\r\n                {\r\n                    \"match\": {\r\n                        \"category\": \"小米\"\r\n                    }\r\n                },\r\n                {\r\n                    \"match\": {\r\n                        \"category\": \"华为\"\r\n                    }\r\n                }\r\n            ],\r\n            \"filter\": {\r\n                \"range\": {\r\n                    \"price\": {\r\n                        \"gt\": 3999.0\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/shopping/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"shopping",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "多条件查询(完全匹配)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"query\": {\r\n        \"match_phrase\": { // 完全匹配\r\n            \"category\": \"华米\"\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/shopping/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"shopping",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "多条件查询(聚合操作)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"aggs\": { // 聚合操作\r\n        \"price_group\": { // 名称，随意起名\r\n            \"terms\": { // 分组\r\n                \"field\": \"price\" // 分组字段\r\n            }\r\n        },\r\n        \"price_avg\": {\r\n            \"avg\": {\r\n                \"field\": \"price\" // 分组字段\r\n            }\r\n        }\r\n    },\r\n    \"size\": 0 // 不显示原始数据\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/shopping/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"shopping",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "mapping（映射）",
+			"item": [
+				{
+					"name": "多条件查询(范围)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"query\": {\r\n        \"match\": {\r\n            \"sex\": \"男的\"\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/user/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"user",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "创建映射",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"properties\": {\r\n        \"name\": {\r\n            \"type\": \"text\", // 可以被分词\r\n            \"index\": true   // 是否被索引\r\n        },\r\n        \"sex\": {\r\n            \"type\": \"keyword\", // 不可以被分词\r\n            \"index\": true\r\n        },\r\n        \"tel\": {\r\n            \"type\": \"keyword\",\r\n            \"index\": false // 不能被索引\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/user/_mapping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"user",
+								"_mapping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询映射",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9200/user/_mapping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"user",
+								"_mapping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "创建文档",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"小张\",\r\n    \"sex\": \"男的\",\r\n    \"tel\": \"12333\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/user/_create/1002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"user",
+								"_create",
+								"1002"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
