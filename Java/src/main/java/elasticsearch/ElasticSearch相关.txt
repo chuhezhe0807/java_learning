@@ -39,3 +39,27 @@ Elasticsearch 是一个分布式、RESTful 风格的搜索和数据分析引擎�
 
     索引操作
         1、创建索引 对比关系型数据库，创建索引就等同于创建数据库
+
+
+    部署环境
+        单机 & 集群
+            单台机器负载能力往往有限，不如集群
+            单台机器存储容量有限
+            单服务器容易出现单点故障，如法实现高可用
+            单服务的并发处理能力有限
+        配置服务器集群时，大于等于两个节点就可以看作是集群了，一般集群节点数量都是3个以上
+
+        一个集群就是有一个或多个服务器节点组织在一起，共同持有整个的数据，并一起提供索引和搜索功能。
+
+        /// elasticsearch.yml
+        ...
+        transport.tcp.port: 9302                    // 内部通信端口
+        discovery.seed_hosts: ["localhost:9301"]    // 以下内容第一台机器不用配置，后续需要配置。 第二台机器找第一台机器的内部通讯端口号
+        discovery.zen.fd.ping_timeout: 1m
+        discovery.zen.fd.ping_retries: 5
+
+        linux环境部署集群时需要注意
+            1、关闭linux环境的防火墙，防止服务启动后出现linux本机可以访问，但是外部无法访问的问题
+            2、vim config/elasticsearch.yml 时需要注意集群名称必须一致，节点名称必须不一致
+            3、config/elasticsearch.yml 中需要配置内部通讯端口 transport.tcp.port: 9300和 discovery.seed_hosts，防止集群启动后，查询不到其他节点
+            4、复制es到其他linux机器时，es安装目下的data和log文件需要清空，防止data/nodes中包含有其他节点的信息，导致启动报错
