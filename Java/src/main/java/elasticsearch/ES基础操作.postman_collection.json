@@ -175,16 +175,16 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/shopping/_doc/1003",
+							"raw": "http://localhost:9200/user/_doc/1005",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"shopping",
+								"user",
 								"_doc",
-								"1003"
+								"1005"
 							]
 						}
 					},
@@ -266,14 +266,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9200/shopping",
+							"raw": "http://localhost:9200/user",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "9200",
 							"path": [
-								"shopping"
+								"user"
 							]
 						}
 					},
@@ -587,6 +587,99 @@
 								"user",
 								"_create",
 								"1002"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "集群",
+			"item": [
+				{
+					"name": "集群状态查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.20.101:9200/_cat/nodes",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"20",
+								"101"
+							],
+							"port": "9200",
+							"path": [
+								"_cat",
+								"nodes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "设置",
+			"item": [
+				{
+					"name": "设置索引分片副本数量",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number_of_replicas\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/user/_settings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"user",
+								"_settings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "使用分析器分析字段",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"analyzer\": \"ik_max_word\",  // ik_max_word 会将文本做最细粒度的拆分 ik_smart 会将文本做最粗粒度的拆分\r\n    \"text\": \"测试单词\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_analyze"
 							]
 						}
 					},
