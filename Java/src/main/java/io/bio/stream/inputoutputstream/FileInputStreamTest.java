@@ -2,8 +2,9 @@ package io.bio.stream.inputoutputstream;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * ClassName: FileInputStream
@@ -50,6 +51,80 @@ public class FileInputStreamTest {
             }
         }
         catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 读取、复制文本文件，推荐使用字符流防止出现编码问题
+    @Test
+    public void test03() {
+        String filePath = "D:\\WorkSpace_BackEnd\\TestFiles\\iofiles\\helloWorld.txt";
+        String destFilePath = "D:\\WorkSpace_BackEnd\\TestFiles\\iofiles\\helloWorld_字符_copy.txt";
+
+        // 字符读取
+//        try(
+//                BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))
+//        ) {
+//            int len;
+//            char[] buff = new char[1024];
+//            while((len = bufferedReader.read(buff)) != -1) {
+//                System.out.println(new String(buff, 0, len));
+//            }
+//        }
+//        catch(IOException e) {
+//            e.printStackTrace();
+//        }
+
+        // 字符复制
+        try (
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(destFilePath))
+        ) {
+            int len;
+            char[] chars = new char[1024];
+
+            while((len = bufferedReader.read(chars)) != -1) {
+                bufferedWriter.write(chars, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 复制图片
+    @Test
+    public void test04() {
+        String srcFilePath = "D:\\WorkSpace_BackEnd\\TestFiles\\iofiles\\input.jpg";
+        String destFilePath = "D:\\WorkSpace_BackEnd\\TestFiles\\iofiles\\input_字符流复制.jpg";
+
+        // 字节流
+//        try(
+//                FileInputStream fileInputStream = new FileInputStream(srcFilePath);
+//                FileOutputStream fileOutputStream = new FileOutputStream(destFilePath)
+//        ) {
+//            int len;
+//            byte[] bytes = new byte[8];
+//
+//            while((len = fileInputStream.read(bytes)) != -1) {
+//                fileOutputStream.write(bytes, 0, len);
+//            }
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        // 包装流
+        try(
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(Paths.get(srcFilePath)));
+                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(Files.newOutputStream(Paths.get(destFilePath)))
+        ) {
+            int len;
+            byte[] bytes = new byte[1024];
+
+            while((len = bufferedInputStream.read(bytes)) != -1) {
+                bufferedOutputStream.write(bytes, 0, len);
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
