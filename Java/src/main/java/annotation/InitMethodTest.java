@@ -21,15 +21,11 @@ import java.lang.reflect.Method;
 
 public class InitMethodTest {
     public static void main(String[] args) throws Exception {
-        Class<?> clazz = Class.forName("com.chuhezhe.annotation.InitDemo");
+        Class<?> clazz = Class.forName("annotation.InitDemo");
 
-        Method[] methods = clazz.getMethods();
-
-        for (Method method : methods) {
-            boolean isAnnotationPresent = method.isAnnotationPresent(InitMethod.class);
-
-            if (isAnnotationPresent) {
-                method.invoke(clazz.getConstructor().newInstance());
+        for (Method method : clazz.getMethods()) {
+            if(method.isAnnotationPresent(InitMethod.class)) {
+                method.invoke(clazz.getDeclaredConstructor().newInstance());
             }
         }
     }
