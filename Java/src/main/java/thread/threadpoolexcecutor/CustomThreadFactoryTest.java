@@ -8,6 +8,9 @@ import java.util.concurrent.*;
  * ClassName: CustomThreadFactoryTest
  * Package: thread.threadpoolexcecutor
  * Description:
+ *      ExecutorService@submit 返回值为Future
+ *          可以执行 Callable 和 Runnable 的任务，执行Runnable任务时可以传入第二个参数用于执行完成任务后返回
+ *      ExecutorService@execute 仅可以执行Runnable任务
  *
  * @Author Chuhezhe
  * @Create 2023/11/13 23:55
@@ -98,25 +101,20 @@ public class CustomThreadFactoryTest {
     @Test
     public void test04() {
         ResultTask resultTask = new ResultTask();
-        // 单个任务的线程池
-        ExecutorService threadPool = Executors.newSingleThreadExecutor();
-        // 提交任务
-        Future<Integer> future = threadPool.submit(resultTask);
+        Task task = new Task();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<Integer> submit = executorService.submit(resultTask);
 
         try {
-            // 获取任务执行的结果
-//            Integer res = future.get(); // 阻塞式获取任务执行结果
-//            Integer res = future.get(1, TimeUnit.SECONDS); // 阻塞式获取任务执行结果，超出设置的时间抛出超时异常
-            Integer res = future.get(5, TimeUnit.SECONDS);
-            // 输出任务执行结果
-            System.out.println(res);
+            Integer integer = submit.get();
+            System.out.println(integer);
         }
-        catch (InterruptedException | ExecutionException | TimeoutException e) {
+        catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         finally {
             // 关闭线程池
-            threadPool.shutdown();
+            executorService.shutdown();
         }
     }
 
