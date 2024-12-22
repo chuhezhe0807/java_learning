@@ -8,3 +8,13 @@ TERMINATED: 线程池彻底关闭
 RUNNING - shutdown() -> SHUTDOWN - 任务队列为空 && 工作线程数量为0 -> TIDYING - terminated() > TERMINATED
 RUNNING - shutdownNow() -> STOP - 工作线程数量为0 -> TIDYING - terminated() > TERMINATED
 
+线程池中的线程执行任务时遇到了异常，线程被销毁还是放回线程池重新利用呢？
+    1、当执行方式是execute时，可以看到堆栈异常的输出，为submit时，堆栈异常没有输出，但是调用Future@get就可以捕获到异常
+    2、不会影响线程池里面其他线程的正常执行，线程池会把这个线程移除掉，并创建一个新的线程放到线程池中
+
+线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这样的处理方式更加明确线程池的运行规则，规避资源耗尽的风险。
+    说明：Executors 返回的线程池对象的弊端如下：
+    1）FixedThreadPool 和 SingleThreadPool：
+    允许的请求队列长度为 Integer.MAX_VALUE，可能会堆积大量的请求，从而导致 OOM。
+    2）CachedThreadPool：
+    允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。
